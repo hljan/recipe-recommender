@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h2>Home</h2>
+  {% if session.username %}
+    <h3>Share New Recipe</h3>
+    <form action="{{ url_for('add_recipe') }}" method="post">
+        <dl>
+            <dt>Name:</dt>
+            <dd><input type="text" size="30" name="name"></dd>
+            <dt>Ingredients (separated by commas):</dt>
+            <dd><input type="text" size="30" name="ingredients"></dd>
+        </dl>
+        <input type="submit" value="Share">
+    </form>
+  {% endif %}
+
+<br>
+
+<h3>Today's Recent Recipes</h3>
+{% include "display_recipes.html" %}
+
+{% endblock %}

@@ -1,0 +1,14 @@
+<ul class="recipes">
+{% for row in recipes %}
+  <li>
+    <b>{{ row.recipe.name }}</b>
+      {% if request.path == "/" %}
+    by <a href="{{ url_for('profile', username=row.username) }}">{{ row.username }}</a>
+      {% endif %}
+    on {{ row.recipe.date }}
+    <a href="{{ url_for('like_recipe', recipe_id=row.recipe.id) }}">like</a><br>
+    <i>{{ ", ".join(row.ingredients) }}</i><br>
+{% else %}
+  <li>There aren't any recipes yet!
+{% endfor %}
+</ul>
