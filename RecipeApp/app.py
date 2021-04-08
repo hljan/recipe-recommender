@@ -5,8 +5,8 @@ def create_app():
     app = Flask(__name__)
 
     # route config
-    from auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
+    # from auth import auth as auth_blueprint
+    # app.register_blueprint(auth_blueprint)
     from main import main as main_blueprint
     app.register_blueprint(main_blueprint)
     from text_search import textSearch as text_search_blueprint

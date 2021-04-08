@@ -9,7 +9,7 @@ def login():
     return render_template('login.html')
 
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/login', methods=['POST', 'GET'])
 def login_post():
     return
 
