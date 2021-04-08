@@ -11,7 +11,7 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    return
+    return 'Login'
 
 
 @auth.route('/logout')

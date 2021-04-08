@@ -1,13 +1,23 @@
 {% extends "base.html" %}
-{% block body %}
-  <h2>Login</h2>
-    <form action="{{ url_for('login') }}" method="post">
-        <dl>
-            <dt>Username:</dt>
-            <dd><input type="text" name="username"></dd>
-            <dt>Password:</dt>
-            <dd><input type="password" name="password"></dd>
-        </dl>
-        <input type="submit" value="Login">
-    </form>
+{% block loginContent %}
+    <div class="column is-4 is-offset-4">
+        <div class="box">
+            <form action="{{ url_for('auth.login_post') }}" method="POST">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="username" placeholder="Your Username" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-large is-fullwidth">Login</button>
+            </form>
+        </div>
+    </div>
+
 {% endblock %}
