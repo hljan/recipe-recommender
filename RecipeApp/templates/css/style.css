@@ -2181,3 +2181,9 @@ a.article:hover {
     background: #6d7fcc !important;
     color: #fff !important;
 }
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}

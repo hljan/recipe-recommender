@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required
 
 auth = Blueprint('auth', __name__)
@@ -11,10 +11,10 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
-    return 'Login'
+    return 'Logged in'
 
 
 @auth.route('/logout')
 # @login_required
 def logout():
-    return
+    return 'Logged out'
