@@ -4,12 +4,12 @@ from flask_login import login_required
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/')
+@auth.route('/login')
 def login():
     return render_template('login.html')
 
 
-@auth.route('/login', methods=['POST', 'GET'])
+@auth.route('/login-post', methods=['POST', 'GET'])
 def login_post():
     return 'Logged in'
 
