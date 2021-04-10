@@ -4,7 +4,8 @@ from flask_login import login_required
 visualSearch = Blueprint('visualSearch', __name__)
 
 
-@visualSearch.route('/')
+@visualSearch.route('/visualSearch/<user_id>/matching_recipes')
 # @login_required
-def visual_search():
-    return render_template('visual_search.html')
+def matching_recipes(user_id):
+
+    return render_template('visual_search.html', user_id=user_id)

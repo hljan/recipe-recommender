@@ -1,5 +1,29 @@
 {% extends "base.html" %}
+
+{% block jQueryPlugin %}
+<link rel="stylesheet" href="/static/css/jquery.mCustomScrollbar.min.css">
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+{% endblock %}
+
 {% block title %} Main Page {% endblock %}
+
+{% block navbarContent %}
+<ul class="menu-area-main">
+    <li>User ID: {{ user_id }}</li>
+    <li class="active">
+        <a href="{{ url_for('main.initial_search', user_id=user_id) }}">Home</a>
+    </li>
+    <li>
+        <a href="{{ url_for('auth.logout') }}">
+            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
 
 {% block bodyContent %}
 <div class="container-fluid padding_dd">
@@ -17,14 +41,148 @@
         </div>
         <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8" style="padding-left: 110px;">
             <div class="text-bg">
-                <h1>Search</h1>
-                <form class="Ingredients">
-                    <p>Main Ingredient:<br><input class="Ingredients_fom" placeholder="Main Ingredient..." type="text"
-                                                   name="main_ingredient"></p>
-                    <p>Side Ingredients:<br><input class="Ingredients_fom" placeholder="Side Ingredients..." type="text"
-                                                   name="side_ingredients"></p>
+                <h1>Recipe Search</h1>
+                <div id="warning_message" class="warning_msg">
+                    Please select at least one main ingredient to proceed
+                </div>
+                <form class="Ingredients" action="{{ url_for('main.initial_search', user_id=user_id) }}" method="POST">
+                    <p>Main Ingredients:</p>
+                    <input class="Ingredients_fom" placeholder="Main Ingredients..." type="text"
+                           id="inputMainIngredients">
+                    <input style="display: none" type="text" name="main_ingredients"
+                           id="selectedMainIngredients"><br><br>
+                    <p id="displayAreaMain"></p>
+
+                    <p>Side Ingredients:</p>
+                    <input class="Ingredients_fom" placeholder="Side Ingredients..." type="text"
+                           id="inputSideIngredients">
+                    <input style="display: none" type="text" name="side_ingredients"
+                           id="selectedSideIngredients"><br><br>
+                    <p id="displayAreaSide"></p>
+
+                    <button id="visual_btn" class="search_btn" type="submit" name="search_type" value="visual_search" disabled="true" onclick="genSelectedIngredientsId()">
+                        Visual Search
+                    </button>
+                    <button id="text_btn" class="search_btn" type="submit" name="search_type" value="text_search" disabled="true" onclick="genSelectedIngredientsId()">
+                        Text Search
+                    </button>
+
+                    <script>
+                        var selectedMainIngredients = [],
+                            selectedSideIngredients = [];
+
+                        $(function () {
+                            var displayText = "",
+                                availableIngredients = [
+                                    {% for i in range(ingredients['id']|length) %}
+                                        { id: "{{ingredients['id'][i]}}",
+                                          value: "{{ingredients['name'][i]}}" },
+                                    {% endfor %}
+                                ];
+
+                            $("#inputMainIngredients").autocomplete({
+                                source: function (request, response) {
+                                    var results = $.ui.autocomplete.filter(availableIngredients, request.term);
+
+                                    results.sort((a, b) => {
+                                        if (Math.abs(a.value.length - request.term.length) < Math.abs(b.value.length - request.term.length)) {
+                                            return -1;
+                                        } else {
+                                            return 1;
+                                        }
+                                    });
+                                    response(results.slice(0, 9));
+                                },
+                                focus: function (event, ui) {
+                                    $("#inputMainIngredients").html(ui.item);
+                                    return false;
+                                },
+                                select: function (event, ui) {
+                                    if (selectedMainIngredients.some(ingredient => ingredient.id === ui.item.id) || selectedSideIngredients.some(ingredient => ingredient.id === ui.item.id)) {
+                                        $("#error_message").show("slow").delay(2000).hide("slow");
+                                    } else {
+                                        displayText = "<button type=\"button\" class=\"selected_ingredients\" onclick=\"deleteEntry(this, " + ui.item.id + ", 'main')\" >" + ui.item.value + "</button>";
+                                        $("#displayAreaMain").append(displayText);
+
+                                        selectedMainIngredients.push(ui.item);
+                                        $("#visual_btn").prop('disabled', false);
+                                        $("#text_btn").prop('disabled', false);
+                                        $("#warning_message").hide("slow");
+                                    }
+                                    $("#inputMainIngredients").val("");
+                                    return false;
+                                }
+                            });
+
+                            $("#inputSideIngredients").autocomplete({
+                                source: function (request, response) {
+                                    var results = $.ui.autocomplete.filter(availableIngredients, request.term);
+
+                                    results.sort((a, b) => {
+                                        if (Math.abs(a.value.length - request.term.length) < Math.abs(b.value.length - request.term.length)) {
+                                            return -1;
+                                        } else {
+                                            return 1;
+                                        }
+                                    });
+                                    response(results.slice(0, 9));
+                                },
+                                focus: function (event, ui) {
+                                    $("#inputSideIngredients").html(ui.item);
+                                    return false;
+                                },
+                                select: function (event, ui) {
+                                    if (selectedSideIngredients.some(ingredient => ingredient.id === ui.item.id) || selectedMainIngredients.some(ingredient => ingredient.id === ui.item.id)) {
+                                        $("#error_message").show("slow").delay(2000).hide("slow");
+                                    } else {
+                                        displayText = "<button type=\"button\" class=\"selected_ingredients\" onclick=\"deleteEntry(this, " + ui.item.id + ", 'side')\" >" + ui.item.value + "</button>";
+                                        $("#displayAreaSide").append(displayText);
+
+                                        selectedSideIngredients.push(ui.item);
+                                    }
+                                    $("#inputSideIngredients").val("");
+                                    return false;
+                                }
+                            })
+                        });
+
+                        function deleteEntry(event, ingredient_id, type) {
+                            if (type === "main") {
+                                selectedMainIngredients = selectedMainIngredients.filter(ingredient => ingredient.id !== ingredient_id.toString());
+                                if (selectedMainIngredients.length <= 0) {
+                                    $("#visual_btn").prop('disabled', true);
+                                    $("#text_btn").prop('disabled', true);
+                                    $("#warning_message").show("slow");
+                                }
+                            } else if (type === "side") {
+                                selectedSideIngredients = selectedSideIngredients.filter(ingredient => ingredient.id !== ingredient_id.toString());
+                            }
+                            event.remove();
+                        }
+
+                        function genSelectedIngredientsId() {
+                            var mainIngredientsId = "",
+                                sideIngredientsId = "";
+
+                            for (let i = 0; i < selectedMainIngredients.length; i++) {
+                                mainIngredientsId += selectedMainIngredients[i].id + ",";
+                            }
+                            $("#selectedMainIngredients").val(mainIngredientsId);
+
+                            for (let i = 0; i < selectedSideIngredients.length; i++) {
+                                sideIngredientsId += selectedSideIngredients[i].id + ",";
+                            }
+                            $("#selectedSideIngredients").val(sideIngredientsId);
+                        }
+
+                        function isMainIngredientEmpty() {
+                            return selectedMainIngredients.length <= 0;
+                        }
+                    </script>
                 </form>
-                <a href="#">Visual Search</a> <a href="#">Text Search</a>
+                <div id="error_message" class="error_msg">
+                    The given ingredient has already been selected
+                </div>
             </div>
         </div>
 
