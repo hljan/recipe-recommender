@@ -14,7 +14,7 @@
 <ul class="menu-area-main">
     <li>User ID: {{ user_id }}</li>
     <li class="active">
-        <a href="{{ url_for('main.initial_search', user_id=user_id) }}">Home</a>
+        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
     </li>
     <li>
         <a href="{{ url_for('auth.logout') }}">
@@ -45,7 +45,7 @@
                 <div id="warning_message" class="warning_msg">
                     Please select at least one main ingredient to proceed
                 </div>
-                <form class="Ingredients" action="{{ url_for('main.initial_search', user_id=user_id) }}" method="POST">
+                <form class="Ingredients" action="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}" method="POST">
                     <p>Main Ingredients:</p>
                     <input class="Ingredients_fom" placeholder="Main Ingredients..." type="text"
                            id="inputMainIngredients">
@@ -183,6 +183,12 @@
                 <div id="error_message" class="error_msg">
                     The given ingredient has already been selected
                 </div>
+                {% if not db_connected %}
+                    <div id="error_message_db" class="error_msg_db">
+                        The graph database is not connected!
+                        Please check your DB connection, logout and login again!
+                    </div>
+                {% endif %}
             </div>
         </div>
 
