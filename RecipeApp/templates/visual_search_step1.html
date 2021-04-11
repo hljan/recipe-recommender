@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} Visual Search {% endblock %}
+
+{% block navbarContent %}
+<ul class="menu-area-main">
+    <li>User ID: {{ user_id }}</li>
+    <li class="active">
+        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
+    </li>
+    <li>
+        <a href="{{ url_for('auth.logout') }}">
+            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block bodyContent %}
+    {% for recipe in result %}
+        {{recipe}},
+    {% endfor %}
+{% endblock %}
