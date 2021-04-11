@@ -17,7 +17,7 @@ source venv/bin/activate
 2. Install the required packages
 
 ```
-pip install -r requirements.text
+pip install -r requirements.txt
 ```
 
 3. Start up the app
