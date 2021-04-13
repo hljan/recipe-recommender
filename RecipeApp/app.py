@@ -5,6 +5,8 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = 'd1255677-af1b-4c77-a981-7e8b1d89ff99'
 
+    # app.config['DEBUG'] = True
+    
     # route config
     from auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
