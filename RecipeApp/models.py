@@ -24,6 +24,11 @@ def get_csv_dict(path='data/ingredient_list.csv'):
     return ingredients
 
 
+def get_users(path='data/user_list.csv'):
+    users = pd.read_csv(path, header=0).to_dict()
+    return users
+
+
 def init_neo4j(uri='bolt://localhost:7687', auth=('neo4j', 'recipe')):
     driver = Graph(bolt=True, host='localhost',
                    user=auth[0], password=auth[-1])
