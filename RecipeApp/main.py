@@ -32,7 +32,8 @@ def initial_search(user_id):
 
         return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=True)
 
-    elif request.method == 'POST':
+    '''
+        elif request.method == 'POST':
         main_ingredients = request.form['main_ingredients'][:-1]
         side_ingredients = request.form['side_ingredients'][:-1]
 
@@ -41,3 +42,4 @@ def initial_search(user_id):
                                     main_ingredients=main_ingredients, side_ingredients=side_ingredients))
         elif request.form['search_type'] == 'text_search':
             return redirect(url_for('textSearch.text_search'))
+    '''
