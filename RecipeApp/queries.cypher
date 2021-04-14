@@ -5,24 +5,83 @@ WHERE id(i) IN [226, 28172, 173, 28267, 28]
 RETURN id(r), r.name, r.n_ingredients, COUNT(*) AS occ
 ORDER BY occ DESC, r.n_ingredients;
 
+//Recipe Search - ing ID
+MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+WITH r,
+    collect(DISTINCT i.ingredient) AS ingredients,
+    [7213, 3184] AS main,
+    [1170, 382, 5006] AS side
+WHERE all(x IN main
+    WHERE (x IN ingredients))
+    AND any(x IN side
+    WHERE (x IN ingredients))
+WITH r.name as RecipeName, r.recipe as ID
+ORDER BY size([x IN side WHERE x IN ingredients]) DESC, r.n_ingredients
+WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+RETURN result[0..9]
+
 //Q2 Content Based Filtering
+MATCH p=(u:USER{user:2203})-[:RATED]->(r:RECIPE)-[s:SIMILAR]->(r2:RECIPE)-[:CONTAINS]->(i:INGREDIENT)
+WITH u, r, r2,
+    collect(DISTINCT i.ingredient) AS ingredients,
+    count(r2.recipe) AS recipeCount, s.sim_score AS score,
+    // user ingredient inputs
+    [1584,6906] AS main,
+    [2499,840,6270,1609,1909,7449,1591] AS side
+// filter only for recipes containing ALL main & ANY of the side ingredients 
+WHERE all(x IN main
+    WHERE (x IN ingredients))
+    AND any(x IN side
+    WHERE (x IN ingredients))
+RETURN ingredients,
+    r.recipe, r.name,
+    r2.recipe AS RecipeID, r2.name AS Name,
+    u.user, score
+    size([x IN side
+        WHERE x IN ingredients]) AS No_SideIngr
+    ORDER BY No_SideIngr DESC, score DESC
+
+
 
 MATCH p=(u:USER{user:"2203"})-[:RATED]->(r:RECIPE)-[s:SIMILAR]->(r2:RECIPE)-[:CONTAINS]->(i:INGREDIENT)
 WITH u, r, r2,
     collect(DISTINCT i.ingredient) AS ingredients,
     count(r2.recipe) AS recipeCount, s.sim_score AS score,
-    ['1584','6906'] AS main,
-    ['2499','840','6270','1609','1909','7449','1591'] AS side
-WHERE all(x IN main WHERE (x IN ingredients))
-    AND any(x IN side WHERE (x IN ingredients))
-RETURN ingredients,
-    r.recipe, r.name,
-    r2.recipe, r2.name,
-    toInteger(u.user),
-    size([x IN side WHERE x IN ingredients]) AS No_SideIngr, score
-    ORDER BY No_SideIngr DESC, score DESC
+    [1584, 6906] AS main,
+    [2499, 840, 6270, 1609, 1909, 7449, 1591] AS side
+WHERE all(x IN main
+    WHERE (x IN ingredients))
+    AND any(x IN side
+    WHERE (x IN ingredients))
+RETURN
+    collect({"ingredients": ingredients,
+    "r1_id": r.recipe,
+    "r1_name": r.name,
+    "r2_id": r2.recipe,
+    "r2_name": r2.name,
+    "user_id": u.user}),
+    size([x IN side
+        WHERE x IN ingredients]) AS No_SideIngr,
+    score
+ORDER BY No_SideIngr DESC, score DESC
 
 // Q3 Collaborative Based Filter
+
+
+MATCH (r:RECIPE)<-[:RATED]-(u2:USER)<-[s:SIMILAR]-(u:USER {user:2203})
+WITH r, count(r.recipe) AS recipeCount, s.sim_score AS score
+ORDER BY recipeCount DESC, score DESC
+WITH (r) MATCH (r)-[:CONTAINS]->(i:INGREDIENT)
+WITH r, collect(DISTINCT i.ingredient) AS ingredients,
+    [1584,6906] AS main,
+    [2499,840,6270,1609,1909,7449,1591] AS side
+MATCH (r) WHERE 1=1 and all(x IN main
+WHERE (x IN ingredients)) AND
+    any(x IN side WHERE (x IN ingredients))
+RETURN r.recipe AS RecipeID, r.name AS Name,
+    size([x IN side WHERE x IN ingredients]) AS No_SideIngr
+ORDER BY No_SideIngr DESC LIMIT 10
+
 
 MATCH (r:RECIPE)<-[:RATED]-(u2:USER)<-[s:SIMILAR]-(u:USER {user:"2203"})
 WITH r, count(r.recipe) AS recipeCount, s.sim_score AS score
@@ -44,7 +103,7 @@ WITH (r)
 MATCH (r)-[:CONTAINS]->(i:INGREDIENT) //With the selected recipes, find ingredients per recipe
 
 WITH r, collect(DISTINCT i.ingredient) AS ingredients, //Store selected recipes, lists of ingredients, selected main ingredients, selected side ingredients
-        ['1584','6906'] AS main, ['2499','840','6270','1609','1909','7449','1591'] AS side
+        [1584,6906] AS main, [2499,840,6270,1609,1909,7449,1591] AS side
 MATCH (r) //Find recipes where all the main ingredients are included and any of the side ingredients are included
 WHERE all(x IN main WHERE (x IN ingredients)) //cocoa, sugar
 AND any(x IN side WHERE (x IN ingredients))  //egg, butter, salt, coconut oil, cream, vanilla, coconut

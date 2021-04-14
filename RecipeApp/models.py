@@ -4,11 +4,12 @@
 
 
     TODO:
-    matching recipes (inputs are user-id and ingredients-id)
-	alternative/additional ingredients (inputs are user-id and ingredients-id)
-	recipe-related recipes (input is recipe-id (and user-id?))
-	recipe-related ingredients (input is recipe-id (and user-id?))
-	recipe-related user-rating ((input is recipe-id (and user-id?))
+        Q1 - matching recipes (inputs are user-id and ingredients-id)
+        Q2 - recipe-related recipes (input is recipe-id (and user-id?))
+        Q3 - recipe-related user-rating ((input is recipe-id (and user-id?))
+        Q4 - alternative/additional ingredients (inputs are user-id and ingredients-id)
+        Q5 - recipe-related ingredients (input is recipe-id (and user-id?))
+        
 """
 
 import pandas as pd

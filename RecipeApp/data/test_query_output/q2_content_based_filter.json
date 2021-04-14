@@ -1,0 +1,399 @@
+﻿[
+  {
+    "ingredients": [
+      6270,
+      332,
+      1584,
+      2683,
+      2499,
+      7449,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 335066,
+    "Name": "no comparison brownies",
+    "u.user": 2203,
+    "score": 0.8888888890000001,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7642,
+      342,
+      6270,
+      332,
+      2683,
+      7449,
+      4717,
+      2499,
+      1584,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 98549,
+    "Name": "chocolate banana nut brownies",
+    "u.user": 2203,
+    "score": 0.818181818,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7449,
+      7655,
+      2499,
+      840,
+      6270,
+      332,
+      2683,
+      1584,
+      6906
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 335894,
+    "Name": "hubby s chewy brownies",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      5333,
+      6270,
+      332,
+      1584,
+      2683,
+      2499,
+      7449,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 12263,
+    "Name": "peppermint patty brownies",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      673,
+      7449,
+      840,
+      2499,
+      332,
+      6270,
+      1584,
+      2683,
+      6906
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 88740,
+    "Name": "10 minute   quick and easy chocolate brownie pudding cake",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      2499,
+      1910,
+      7449,
+      6906,
+      1584,
+      840,
+      6270,
+      332,
+      2683
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 36627,
+    "Name": "cream cheese brownies",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7449,
+      7642,
+      1388,
+      6270,
+      1584,
+      2683,
+      840,
+      6906,
+      2499
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 50578,
+    "Name": "triple chocolate brownie pie",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7642,
+      6270,
+      1584,
+      2683,
+      2499,
+      7449,
+      3723,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 36669,
+    "Name": "honey brownies",
+    "u.user": 2203,
+    "score": 0.8,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      1584,
+      2683,
+      840,
+      7449,
+      6270,
+      6906,
+      2499
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 205648,
+    "Name": "3 minute microwave brownies",
+    "u.user": 2203,
+    "score": 0.7777777779999999,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      4958,
+      6270,
+      332,
+      1584,
+      2683,
+      7449,
+      2499,
+      7655,
+      840,
+      6906
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 371961,
+    "Name": "fabulous  brownies",
+    "u.user": 2203,
+    "score": 0.727272727,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7449,
+      2499,
+      840,
+      869,
+      6270,
+      335,
+      332,
+      6906,
+      1584,
+      2683
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 381671,
+    "Name": "light   fluffy brownie muffins",
+    "u.user": 2203,
+    "score": 0.727272727,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7642,
+      6395,
+      6270,
+      1584,
+      7449,
+      2499,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 186762,
+    "Name": "absolutely best brownies",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      6270,
+      335,
+      1584,
+      2683,
+      7449,
+      2499,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 77588,
+    "Name": "hershey s chewy chocolate cookies",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      6270,
+      335,
+      7449,
+      2499,
+      6906,
+      2683,
+      840,
+      1584
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 365803,
+    "Name": "fudge cookies",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7655,
+      6270,
+      7449,
+      2683,
+      1584,
+      6906,
+      2499,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 74010,
+    "Name": "wonderful chocolate waffles",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 4
+  },
+  {
+    "ingredients": [
+      7642,
+      7449,
+      1584,
+      2683,
+      2499,
+      6906,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 343647,
+    "Name": "brownies oma s",
+    "u.user": 2203,
+    "score": 0.7777777779999999,
+    "No_SideIngr": 3
+  },
+  {
+    "ingredients": [
+      3834,
+      7655,
+      7642,
+      332,
+      1584,
+      2683,
+      7449,
+      6906,
+      2499,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 134173,
+    "Name": "gramma s fudge cake",
+    "u.user": 2203,
+    "score": 0.727272727,
+    "No_SideIngr": 3
+  },
+  {
+    "ingredients": [
+      2499,
+      6270,
+      6906,
+      1584,
+      332,
+      2683,
+      3314,
+      840
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 180127,
+    "Name": "half hour steam pudding",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 3
+  },
+  {
+    "ingredients": [
+      6270,
+      5886,
+      1584,
+      332,
+      2683,
+      6906,
+      840,
+      2499
+    ],
+    "r.recipe": 118242,
+    "r.name": "intensely chocolate cocoa brownies",
+    "RecipeID": 9422,
+    "Name": "chocolate peanut brownies",
+    "u.user": 2203,
+    "score": 0.7,
+    "No_SideIngr": 3
+  },
+  {
+    "ingredients": [
+      7642,
+      6270,
+      335,
+      332,
+      1584,
+      2683,
+      4717,
+      342,
+      7449,
+      2499,
+      6906,
+      4574
+    ],
+    "r.recipe": 60305,
+    "r.name": "sour cream banana loaf cake  2 points",
+    "RecipeID": 133998,
+    "Name": "chocolate banana bread",
+    "u.user": 2203,
+    "score": 0.533333333,
+    "No_SideIngr": 3
+  }
+]

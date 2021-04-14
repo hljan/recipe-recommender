@@ -1,0 +1,42 @@
+﻿[
+  {
+    "res[0..9]": [
+      {
+        "count": 445,
+        "ingredients": "onion"
+      },
+      {
+        "count": 293,
+        "ingredients": "garlic clove"
+      },
+      {
+        "count": 253,
+        "ingredients": "water"
+      },
+      {
+        "count": 160,
+        "ingredients": "olive oil"
+      },
+      {
+        "count": 155,
+        "ingredients": "ground cumin"
+      },
+      {
+        "count": 134,
+        "ingredients": "oil"
+      },
+      {
+        "count": 132,
+        "ingredients": "tomato"
+      },
+      {
+        "count": 122,
+        "ingredients": "ground coriander"
+      },
+      {
+        "count": 119,
+        "ingredients": "cumin"
+      }
+    ]
+  }
+]
