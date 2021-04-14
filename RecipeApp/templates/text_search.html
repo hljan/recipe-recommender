@@ -1,42 +1,6 @@
 {% extends "base.html" %}
 {% block bodyContent %}
-    <div class="column">
-        <table>
-        <tr>
-            <td>
-            <div class="box">
-                <h2>Main Ingredient</h2>
-                <div class="field">
-                <div class="control">
-                    <input class="input is-small" type="text" name="main-ingredient" autofocus="">
-                </div>
-            </div>
-            </div>
-
-            <div class="box">
-                <h2>Side Ingredients</h2>
-                <div class="field">
-                <div class="control">
-                    <input class="input is-small" type="text" name="side-ingredient" autofocus="">
-                </div>
-                <div class="field">
-                <div class="control">
-                    <input class="input is-small" type="text" name="side-ingredient" autofocus="">
-                </div>
-                <div class="field">
-                <div class="control">
-                    <input class="input is-small" type="text" name="side-ingredient" autofocus="">
-                </div>
-            </div>
-            </div>
-            <td>
-
-        <td>
-            <button>Search</button>
-        </td>
-
-        <td>
-            <div class="column box">
+    <div class="column is-4 is-offset-4 box">
                 <h2>Recommended Recipes</h2>
                 <table>
                     <tr>
@@ -61,8 +25,4 @@
                     </tr>
                 </table>
             </div>
-        </td>
-        </tr>
-    </table>
-    </div>
 {% endblock %}
