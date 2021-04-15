@@ -23,17 +23,16 @@
                 <hr>
                 <table>
                     <tr>
-                        <th>Rank</th>
                         <th>Recipe Name</th>
                         <th>Average User Rating</th>
                     </tr>
-                    {% for key,value in recipe_names.items() %}
+                    {%  for recipe in recipes %}
                     <tr>
-                        <td>{{ key|int + 1 }}</td>
-                        <td><a href="/recipes/{{ key }}">{{value}}</a></td>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.recipeName}}</a></td>
                         <td></td>
                     </tr>
                     {% endfor %}
+
                 </table>
             </div>
 {% endblock %}
