@@ -31,15 +31,29 @@ def get_users(path='data/user_list.csv'):
     users = pd.read_csv(path, header=0).to_dict()
     return users
 
-def get_recipes_json(path='data/test_query_output/q1_match_recipes.json'):
-    file = open(path, encoding='utf-8-sig')
-    results_array = json.load(file)
-    results = []
-    for items in results_array:
+def get_recipes(path_1='data/test_query_output/q1_match_recipes.json',
+                path_2='data/test_query_output/q2_content_based_filter.json',
+                path_3='data/test_query_output/q3_collab_filter.json'):
+    q1_match_recipes = open(path_1, encoding='utf-8-sig')
+    q2_content_based = open(path_2, encoding='utf-8-sig')
+    q3_match_recipes = open(path_3, encoding='utf-8-sig')
+
+    results_array_1 = json.load(q1_match_recipes)
+    results_array_2 = json.load(q2_content_based)
+    results_array_3 = json.load(q3_match_recipes)
+
+    matching_recipes = []
+
+    for items in results_array_1:
         for item in items:
             for i in items[item]:
-                results.append(i)
-    return results
+                matching_recipes.append(i)
+
+    content_based = results_array_2
+
+    collab_filter = results_array_3
+
+    return matching_recipes, content_based, collab_filter
 
 def init_neo4j(uri='bolt://localhost:7687', auth=('neo4j', 'recipe')):
     #driver = Graph(bolt=True, host='localhost', user=auth[0], password=auth[-1])

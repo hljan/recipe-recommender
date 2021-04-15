@@ -21,18 +21,42 @@
                 <h6>Main ingredients:</h6>
                 <h6>Side ingredients:</h6>
                 <hr>
+                <h5><strong>Matching Recipes</strong></h5>
                 <table>
                     <tr>
-                        <th>Recipe Name</th>
-                        <th>Average User Rating</th>
+                        <th>Name</th>
                     </tr>
-                    {%  for recipe in recipes %}
+                    {%  for recipe in matching_recipes %}
                     <tr>
                         <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.recipeName}}</a></td>
-                        <td></td>
                     </tr>
                     {% endfor %}
-
+                </table>
+                <hr>
+                <h5><strong>Content Based Filter</strong></h5>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                    {%  for recipe in content_based %}
+                    <tr>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                        <td>{{ recipe.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <hr>
+                <h5><strong>Collaborative Filter</strong></h5>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                    {%  for recipe in collab_filter %}
+                    <tr>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                    </tr>
+                    {% endfor %}
                 </table>
             </div>
 {% endblock %}
