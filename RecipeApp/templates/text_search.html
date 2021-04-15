@@ -1,28 +1,24 @@
 {% extends "base.html" %}
 {% block bodyContent %}
-    <div class="column is-4 is-offset-4 box">
-                <h2>Recommended Recipes</h2>
+    <div class="column is-6 is-offset-2 box">
+                <h1>Your Recommended Recipes!</h1>
+                <hr>
+                <h6>Main ingredients:</h6>
+                <h6>Side ingredients:</h6>
+                <hr>
                 <table>
                     <tr>
-                        <th>Name</th>
-                        <th>Nutritional Information</th>
-                        <th>Related Ingredients</th>
+                        <th>Rank</th>
+                        <th>Recipe Name</th>
+                        <th>Average User Rating</th>
                     </tr>
+                    {% for key,value in recipe_names.items() %}
                     <tr>
-                        <td>Recipe 1</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Recipe 2</td>
-                        <td></td>
+                        <td>{{ key|int + 1 }}</td>
+                        <td><a href="/recipes/{{ key }}">{{value}}</a></td>
                         <td></td>
                     </tr>
-                    <tr>
-                        <td>Recipe 3</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    {% endfor %}
                 </table>
             </div>
 {% endblock %}

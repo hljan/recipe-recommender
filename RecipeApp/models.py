@@ -21,20 +21,26 @@ import pdb
 
 
 def get_csv_dict(path='data/ingredient_list.csv'):
-    ingredients = pd.read_csv(path, header=0).to_dict()
-    return ingredients
+    #ingredients = pd.read_csv(path, header=0).to_dict()
+    #return ingredients
+    pass
 
 
 def get_users(path='data/user_list.csv'):
     users = pd.read_csv(path, header=0).to_dict()
     return users
 
+def get_recipes(path='data/recipe_list.csv', limit=10):
+    recipes_df = pd.read_csv(path, header=0)
+    top_recipes = recipes_df.head(limit)
+    recipes = top_recipes.to_dict()
+    return recipes
 
 def init_neo4j(uri='bolt://localhost:7687', auth=('neo4j', 'recipe')):
-    driver = Graph(bolt=True, host='localhost',
-                   user=auth[0], password=auth[-1])
+    #driver = Graph(bolt=True, host='localhost', user=auth[0], password=auth[-1])
     # driver = GraphDatabase.driver(uri=uri, auth=auth)
-    return driver
+    #return driver
+    pass
 
 
 def test_conn(driver):
