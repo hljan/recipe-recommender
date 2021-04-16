@@ -23,13 +23,14 @@ import pdb
 
 def get_csv_dict(path='data/ingredient_list.csv'):
     #ingredients = pd.read_csv(path, header=0).to_dict()
-    #return ingredients
+    # return ingredients
     pass
 
 
 def get_users(path='data/user_list.csv'):
     users = pd.read_csv(path, header=0).to_dict()
     return users
+
 
 def get_recipes(path_1='data/test_query_output/q1_match_recipes.json',
                 path_2='data/test_query_output/q2_content_based_filter.json',
@@ -55,11 +56,92 @@ def get_recipes(path_1='data/test_query_output/q1_match_recipes.json',
 
     return matching_recipes, content_based, collab_filter
 
-def init_neo4j(uri='bolt://localhost:7687', auth=('neo4j', 'recipe')):
-    #driver = Graph(bolt=True, host='localhost', user=auth[0], password=auth[-1])
-    # driver = GraphDatabase.driver(uri=uri, auth=auth)
-    #return driver
-    pass
+
+class PyNeoGraph:
+
+    def __init__(self, uri='bolt://localhost:7687'):
+        """
+        """
+
+        self.driver = Graph(bolt=True, host='localhost')
+
+    def test_conn(self):
+        query = """
+                MATCH (n) 
+                RETURN n LIMIT 5
+                """
+        results = self.driver.run(query).to_data_frame()
+
+        if results.size == 5:
+            return True
+        else:
+            return False
+
+    def close(self):
+        self.driver.close()
+
+    def get_neo4j_id(self, node="(i:INGREDIENT)", in_list=[7213, 3184]):
+        """
+            Args:
+                node(str): string in Cypher node format
+                    (i:INGREDIENT) etc
+                in_list(list): list of raw ids to match nodes
+
+            Returns:
+                ids(list): list of neo4j id fields for nodes
+            
+        """
+
+        node_var, label = f"{node}".split(':')
+
+        query = f"""
+            MATCH {node}
+            WHERE {node_var}.{label.lower()} IN {in_list}
+            RETURN id({node_var})
+        """
+
+        return self.driver.run(query).to_series().to_list()
+
+    def get_matching_recipes(self, main_ingredients = [7213, 3184], side_ingredients = [1170, 382, 5006]):
+        """
+            Args:
+                main_ingredints(list[int]): list of main_ingredient raw_ids
+                side_ingredient(list[int]): list of side_ingredient raw_ids
+
+            Returns:
+                results(list[dict]): list of matching recipes that contain main and side
+                    ingredients
+        """
+        
+        main_ingredients = self.get_neo4j_id(in_list=main_ingredients)
+        side_ingredients = self.get_neo4j_id(in_list=side_ingredients)
+        
+        query = """
+        MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+        WITH r,
+            collect(id(i)) AS ingredients,
+            $main_ingredients AS main, // user input
+            $side_ingredients AS side // user input
+        WHERE all(x IN main
+            WHERE (x IN ingredients))
+            AND any(x IN side
+            WHERE (x IN ingredients))
+        WITH r.name as RecipeName, id(r) as ID
+        ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
+        WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+        RETURN result[0..9]
+        """
+        
+        results = self.driver.run(query, {"main_ingredients": main_ingredients,
+                                    "side_ingredients": side_ingredients})
+        return results.data()
+
+    
+
+
+def init_neo4j(uri='bolt://localhost:7687'):
+    driver = Graph(bolt=True, host='localhost')
+    return driver
 
 
 def test_conn(driver):
@@ -134,6 +216,7 @@ def get_recipe_details(driver, recipe_id):
 
     return results
 
+
 def match_recipes(driver, ingredients, user_id):
     """
         Using neo4j library
@@ -149,7 +232,7 @@ def match_recipes(driver, ingredients, user_id):
         Input:​ List of ingredients​
         Output:​ List of recipe ids​
     """
-    
+
     # ingredients = ["tomato", "garlic", "cheese", "basil", "pasta", "olive oil"]
     query = """
         //Recipe Search
@@ -162,7 +245,6 @@ def match_recipes(driver, ingredients, user_id):
 
         ORDER BY occ DESC, r.n_ingredients
         """
-        
+
     df = driver.run(query, {"ingredients": ingredients}).to_data_frame()
     return df
-
