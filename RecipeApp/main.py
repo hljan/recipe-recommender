@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for
 from models import get_csv_dict, PyNeoGraph
 import pdb
 
@@ -10,26 +10,19 @@ ingredients_dict = dict()
 def initial_search(user_id):
     if request.method == 'GET':
         global ingredients_dict
-        driver_py2neo = session.get('driver_neo4j', None)
 
         if not ingredients_dict:
             ingredients_dict = get_csv_dict()
 
-        if not driver_py2neo:
-            is_db_up = False
-            try:
-                driver_py2neo = PyNeoGraph()
-                is_db_up = driver_py2neo.test_conn()
+        is_db_up = False
+        try:
+            driver_py2neo = PyNeoGraph()
+            is_db_up = driver_py2neo.test_conn()
 
-                # pdb.set_trace()
-                session['driver_neo4j'] = driver_py2neo
-            except:
-                pass
-            return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=is_db_up)
-        else:
-            session['driver_neo4j'] = driver_py2neo
-
-        return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=True)
+            # pdb.set_trace()
+        except:
+            pass
+        return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=is_db_up)
 
     elif request.method == 'POST':
         main_ingredients = request.form['main_ingredients'][:-1]
