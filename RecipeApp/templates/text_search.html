@@ -1,28 +1,62 @@
 {% extends "base.html" %}
+{% block title %} Main Page {% endblock %}
+
+{% block navbarContent %}
+<ul class="menu-area-main">
+    <li>User ID: {{ user_id }}</li>
+    <li class="active">
+        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
+    </li>
+    <li>
+        <a href="{{ url_for('auth.logout') }}">
+            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+        </a>
+    </li>
+</ul>
+{% endblock %}
 {% block bodyContent %}
-    <div class="column is-4 is-offset-4 box">
-                <h2>Recommended Recipes</h2>
+    <div class="column is-6 is-offset-2 box">
+                <h1>Your Recommended Recipes!</h1>
+                <hr>
+                <h6>Main ingredients:</h6>
+                <h6>Side ingredients:</h6>
+                <hr>
+                <h5><strong>Matching Recipes</strong></h5>
                 <table>
                     <tr>
                         <th>Name</th>
-                        <th>Nutritional Information</th>
-                        <th>Related Ingredients</th>
                     </tr>
+                    {%  for recipe in matching_recipes %}
                     <tr>
-                        <td>Recipe 1</td>
-                        <td></td>
-                        <td></td>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.recipeName}}</a></td>
                     </tr>
+                    {% endfor %}
+                </table>
+                <hr>
+                <h5><strong>Content Based Filter</strong></h5>
+                <table>
                     <tr>
-                        <td>Recipe 2</td>
-                        <td></td>
-                        <td></td>
+                        <th>Name</th>
+                        <th>Score</th>
                     </tr>
+                    {%  for recipe in content_based %}
                     <tr>
-                        <td>Recipe 3</td>
-                        <td></td>
-                        <td></td>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                        <td>{{ recipe.score }}</td>
                     </tr>
+                    {% endfor %}
+                </table>
+                <hr>
+                <h5><strong>Collaborative Filter</strong></h5>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                    {%  for recipe in collab_filter %}
+                    <tr>
+                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                    </tr>
+                    {% endfor %}
                 </table>
             </div>
 {% endblock %}

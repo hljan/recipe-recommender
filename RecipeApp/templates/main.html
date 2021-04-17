@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 {% endblock %}
 
-{% block title %} Main Page {% endblock %}
+{% block title %} Text Search {% endblock %}
 
 {% block navbarContent %}
 <ul class="menu-area-main">
@@ -62,7 +62,7 @@
                     <button id="visual_btn" class="search_btn" type="submit" name="search_type" value="visual_search" disabled="true" onclick="genSelectedIngredientsId()">
                         Visual Search
                     </button>
-                    <button id="text_btn" class="search_btn" type="submit" name="search_type" value="text_search" disabled="true" onclick="genSelectedIngredientsId()">
+                    <button id="text_btn" class="search_btn" type="submit" name="search_type" value="text_search" onclick="genSelectedIngredientsId()">
                         Text Search
                     </button>
 
