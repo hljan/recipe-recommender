@@ -15,7 +15,7 @@ def initial_search(user_id):
         driver_neo4j = session.get('driver_neo4j', None)
 
         if not ingredients_dict:
-            ingredients_dict = get_csv_dict('data/ingredient_list.csv')
+            ingredients_dict = get_csv_dict()
 
         if not driver_neo4j:
             is_db_up = False
@@ -37,7 +37,7 @@ def initial_search(user_id):
         side_ingredients = request.form['side_ingredients'][:-1]
 
         if request.form['search_type'] == 'visual_search':
-            return redirect(url_for('visualSearch.query_by_ingredients', user_id=user_id, tab_type='recipe',
+            return redirect(url_for('visualSearch.matching_recipes', user_id=user_id, tab_type='recipe',
                                     main_ingredients=main_ingredients, side_ingredients=side_ingredients))
         elif request.form['search_type'] == 'text_search':
             return redirect(url_for('textSearch.text_search'))

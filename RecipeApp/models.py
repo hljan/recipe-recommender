@@ -13,14 +13,17 @@
 """
 
 import pandas as pd
+import json
 from py2neo import Graph
+
 from neo4j import GraphDatabase
 import pdb
+
 
 # TODO: move this to different file
 
 
-def get_csv_dict(path='data/ingredient_list.csv'):
+def get_csv_dict(path='data/ingredient_autocomplete.csv'):
     ingredients = pd.read_csv(path, header=0).to_dict()
     return ingredients
 
@@ -30,7 +33,7 @@ def get_users(path='data/user_list.csv'):
     return users
 
 
-def init_neo4j(uri='bolt://localhost:7687', auth=('neo4j', 'recipe')):
+def init_neo4j(auth=('neo4j', 'recipe')):
     driver = Graph(bolt=True, host='localhost',
                    user=auth[0], password=auth[-1])
     # driver = GraphDatabase.driver(uri=uri, auth=auth)
@@ -50,17 +53,59 @@ def test_conn(driver):
         return False
 
 
-def get_matching_recipes(driver, user_id, main_ingredients, side_ingredients):
+def get_matching_recipes(driver, main_ingredients, side_ingredients):
     # TODO: implement the query
-    results = main_ingredients
     # query = """
     #         """
     # results = driver.run(query).to_data_frame()
+    # results = json.dumps(driver.run(query).data())
+
+    results = [
+        {
+            "recipeName": "stuffed peppers with sausage",
+            "recipeID": 434234
+        },
+        {
+            "recipeName": "fresh tomato and roasted garlic salad dressing",
+            "recipeID": 108091
+        },
+        {
+            "recipeName": "strip salad",
+            "recipeID": 41284
+        },
+        {
+            "recipeName": "spinach and mushroom pizza",
+            "recipeID": 39912
+        },
+        {
+            "recipeName": "linguine with tomatoes and basil",
+            "recipeID": 110808
+        },
+        {
+            "recipeName": "zucchini packets for the grill",
+            "recipeID": 41087
+        },
+        {
+            "recipeName": "roasted tomato salad",
+            "recipeID": 63172
+        },
+        {
+            "recipeName": "linguini alla cecca",
+            "recipeID": 27118
+        },
+        {
+            "recipeName": "pasta w  garlic and veggies",
+            "recipeID": 46991
+        }
+    ]
+
+    results = json.dumps(results)
+    results = {'data': results}
 
     return results
 
 
-def get_alternative_ingredients(driver, user_id, main_ingredients, side_ingredients):
+def get_additional_ingredients(driver, user_id, main_ingredients, side_ingredients):
     # TODO: implement the query
     results = side_ingredients
     # query = """
@@ -109,6 +154,7 @@ def get_recipe_details(driver, recipe_id):
 
     return results
 
+
 def match_recipes(driver, ingredients, user_id):
     """
         Using neo4j library
@@ -124,7 +170,7 @@ def match_recipes(driver, ingredients, user_id):
         Input:​ List of ingredients​
         Output:​ List of recipe ids​
     """
-    
+
     # ingredients = ["tomato", "garlic", "cheese", "basil", "pasta", "olive oil"]
     query = """
         //Recipe Search
@@ -137,7 +183,6 @@ def match_recipes(driver, ingredients, user_id):
 
         ORDER BY occ DESC, r.n_ingredients
         """
-        
+
     df = driver.run(query, {"ingredients": ingredients}).to_data_frame()
     return df
-
