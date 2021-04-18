@@ -1,22 +1,19 @@
 {% extends "base.html" %}
 {% block loginContent %}
-<div class="column is-4 is-offset-4">
-    <div class="box">
-        <h2>User IDs</h2>
-        {% for key,value in user_ids.items() %}
-            <li>{{value}}</li>
-        {% endfor %}
-    </div>
-</div>
+
 <div class="column is-4 is-offset-4">
     <div class="box">
         <form action="{{ url_for('auth.login') }}" method="POST">
+            <h5>Please select User ID below</h5>
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" name="username" placeholder="Enter User ID here" autofocus="">
+                    <select class="input is-large" type="text" id="user_id" name="user_id" >
+                        {% for key,value in user_ids.items() %}
+                            <option value="{{value}}">{{value}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
-
             <button class="button is-block is-info is-large is-fullwidth">Login</button>
         </form>
     </div>

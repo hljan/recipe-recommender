@@ -12,8 +12,7 @@ def login():
     if request.method == 'GET':
         return render_template('login.html', user_ids=users['id(u)'])
     elif request.method == 'POST':
-        # TODO: add login function here
-        userid = '152374'
+        userid = request.form['user_id']
         return redirect(url_for('main.initial_search', user_id=userid))
 
 
