@@ -10,7 +10,9 @@
 
 {% block navbarContent %}
 <ul class="menu-area-main">
-    <li>User ID: {{ user_id }}</li>
+    <li>
+        <a>User ID: {{ user_id }}</a>
+    <li>
     <li class="active">
         <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
     </li>
@@ -23,58 +25,62 @@
 {% endblock %}
 
 {% block bodyContent %}
-<form action="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
+<form style="margin-left:1em" action="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
       method="POST">
-    <button class="tablink" type="submit" name="tab_type" value="recipe">
+    <button id="tab_btn_rec" class="tablink" type="submit" name="tab_type" value="recipe">
         Recommend Recipes
     </button>
-    <button class="tablink" type="submit" name="tab_type" value="ingredient">
+    <button id="tab_btn_ing" class="tablink" type="submit" name="tab_type" value="ingredient">
         Additional Ingredients
     </button>
 
-    <br>
-    <!--Q2-->
-    <button style="display: none" class="tablink" type="submit" name="tab_type" value="contentBased">
-        Content-Based Filtering
-    </button>
-    <!--Q3-->
-    <button style="display: none" class="tablink" type="submit" name="tab_type" value="collaborative">
-        Collaborative Filtering
-    </button>
-    <!--Q5-->
-    <button style="display: none" class="tablink" type="submit" name="tab_type" value="usedIngredients">
-        Used Ingredients
-    </button>
-    <!--Q7-->
-    <button style="display: none" class="tablink" type="submit" name="tab_type" value="userRatings">
-        User Ratings
-    </button>
+    <div style="padding-left: 12.5%; padding-right: 12.5%">
+        <!--Q2-->
+        <button id="tab_btn_cnt" style="display: none" class="tablink" type="submit" name="tab_type" value="contentBased">
+            Content-Based Filtering
+        </button>
+        <!--Q3-->
+        <button id="tab_btn_col" style="display: none" class="tablink" type="submit" name="tab_type" value="collaborative">
+            Collaborative Filtering
+        </button>
+    </div>
+
+    <div style="padding-left: 41.5%; padding-right: 25%">
+        <!--Q4 Confirm-->
+        <button id="tab_btn_ing_cfm" style="display: none" class="tablink" type="submit" name="tab_type" value="ingredient"
+                disabled=true>
+            Confirm Selection
+        </button>
+    </div>
 </form>
 
 <div id="recipeGraph"></div>
 
 <script>
     // handle tab vis
-    var selectedTab = {{tab_type | tojson}},
-        tabLinks = document.getElementsByClassName("tablink");
-
-    for (i = 0; i < tabLinks.length; i++) {
-        if(tabLinks[i].value === selectedTab) {
-            tabLinks[i].disabled = "true";
-        }
-      }
+    var selectedTab = {{tab_type | tojson}};
+    openTab(selectedTab);
 
     // handle query data
     var graphData = {{result.data | safe}},
         nodes = {},
         links = [];
+    nodes[0] = {name: 'Input Ingredients', id: 0};
 
-    nodes[0] = { name: 'Input Ingredients' };
-    graphData.forEach(function (data) {
-        nodes[data.recipeID] = { name: data.recipeName };
-        links.push({ source: nodes[0], target: nodes[data.recipeID] });
-    });
+    if (selectedTab !== "ingredient") {
+        graphData.forEach(function (data) {
+            nodes[data.recipeID] = {name: data.recipeName, id: data.recipeID};
+            links.push({source: nodes[0], target: nodes[data.recipeID]});
+        });
 
-    draw_graph_q1(nodes, links, "#recipeGraph");
+        draw_graph_q1(nodes, links, "#recipeGraph");
+    } else {
+        graphData.forEach(function (data) {
+            nodes[data.ingredientID] = {name: data.ingredientName, id: data.ingredientID};
+            links.push({source: nodes[0], target: nodes[data.ingredientID]});
+        });
+
+        draw_graph_q4(nodes, links, "#recipeGraph");
+    }
 </script>
 {% endblock %}
