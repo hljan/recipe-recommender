@@ -4,25 +4,31 @@ import pdb
 
 main = Blueprint('main', __name__)
 ingredients_dict = dict()
+driver_neo4j = list()
+main_ingredients = list()
+side_ingredients = list()
 
 
 @main.route('/main/<user_id>', methods=['GET', 'POST'])
 def initial_search(user_id):
     if request.method == 'GET':
-        global ingredients_dict
+        global ingredients_dict, driver_neo4j, main_ingredients, side_ingredients
 
         if not ingredients_dict:
             ingredients_dict = get_csv_dict()
 
-        is_db_up = False
-        try:
-            driver_py2neo = PyNeoGraph()
-            is_db_up = driver_py2neo.test_conn()
+        if not driver_neo4j:
+            is_db_up = False
+            try:
+                driver_neo4j = PyNeoGraph()
+                is_db_up = driver_neo4j.test_conn()
 
-            # pdb.set_trace()
-        except:
-            pass
-        return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=is_db_up)
+                # pdb.set_trace()
+            except:
+                pass
+            return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=is_db_up)
+        else:
+            return render_template('main.html', user_id=user_id, ingredients=ingredients_dict, db_connected=True)
 
     elif request.method == 'POST':
         main_ingredients = request.form['main_ingredients'][:-1]
@@ -34,3 +40,19 @@ def initial_search(user_id):
         elif request.form['search_type'] == 'text_search':
             return redirect(url_for('textSearch.text_search', user_id=user_id,
                                     main_ingredients=main_ingredients, side_ingredients=side_ingredients))
+
+
+@main.route('/main/<user_id>/recipe_details/<recipe>', methods=['GET', 'POST'])
+def recipe_details(user_id, recipe):
+    global driver_neo4j, main_ingredients, side_ingredients
+
+    recipe_id, recipe_name = recipe.split("&")
+    recipe_decode = recipe.replace('%20', ' ')
+
+    if not driver_neo4j:
+        driver_neo4j = PyNeoGraph(debug=True)
+
+    result = driver_neo4j.get_recipe_details(recipe_id)
+
+    return render_template('recipe_details.html', user_id=user_id, recipe=recipe_decode, result=result,
+                           main_ingredients=main_ingredients, side_ingredients=side_ingredients)

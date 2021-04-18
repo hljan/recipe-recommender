@@ -11,7 +11,9 @@
 
 {% block navbarContent %}
 <ul class="menu-area-main">
-    <li>User ID: {{ user_id }}</li>
+    <li>
+        <a>User ID: {{ user_id }}</a>
+    <li>
     <li class="active">
         <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
     </li>

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %} Visual Search {% endblock %}
+
+{% block jQueryPlugin %}
+<script type="text/javascript" src="/static/js/d3.v5.min.js"></script>
+<script type="text/javascript" src="/static/js/d3-tip.min.js"></script>
+<script type="text/javascript" src="/static/js/d3-recipe-graphs.js"></script>
+{% endblock %}
+
+{% block navbarContent %}
+<ul class="menu-area-main">
+    <li>
+        <a>User ID: {{ user_id }}</a>
+    </li>
+    <li class="active">
+        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
+    </li>
+    <li class="active">
+        <a href="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}">Back</a>
+    </li>
+    <li>
+        <a href="{{ url_for('auth.logout') }}">
+            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block bodyContent %}
+<form style="margin-left:1em" action="{{ url_for('visualSearch.recipe_info', user_id=user_id, recipe=recipe, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
+      method="POST">
+    <!--Q5-->
+    <button id="tab_btn_usi" class="tablink" type="submit" name="tab_type" value="usedIngredients">
+        Used Ingredients
+    </button>
+    <!--Q7-->
+    <button id="tab_btn_usr" class="tablink" type="submit" name="tab_type" value="userRatings">
+        User Ratings
+    </button>
+</form>
+
+<div id="recipeInfoGraph"></div>
+
+<script>
+    // handle tab vis
+    var selectedTab = {{tab_type | tojson}};
+    openTab(selectedTab);
+
+    // handle query data
+    var graphData = {{result.data | safe}},
+        nodes = {},
+        links = [],
+        recipe_info = {{recipe | tojson}}.split('&'),
+        recipe_name = decodeURI(recipe_info[1]);
+    nodes[0] = { name: recipe_name, id: 0 };
+
+    if (selectedTab === "usedIngredients") {
+        graphData.forEach(function (data) {
+            nodes[data.ingredientID] = {name: data.ingredientName, id: data.ingredientID};
+            links.push({source: nodes[0], target: nodes[data.ingredientID]});
+        });
+
+        draw_graph_q5(nodes, links, "#recipeInfoGraph");
+    } else if (selectedTab === "userRatings") {
+        graphData.forEach(function (data) {
+            nodes[data.userID] = {name: ("Rating: " + data.rating), id: data.userID};
+            links.push({source: nodes[0], target: nodes[data.userID]});
+        });
+
+        draw_graph_q7(nodes, links, "#recipeInfoGraph");
+    }
+</script>
+{% endblock %}

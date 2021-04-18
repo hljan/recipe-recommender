@@ -28,6 +28,28 @@ path.nodeLink {
     stroke-width: 3px;
 }
 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  border: 2px solid #ffffff;
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+  background-color: #ece682;
+}
+
+th {
+  border: 2px solid #ffffff;
+  text-align: right;
+  padding: 10px;
+  font-size: 14px;
+  background-color: #ece682;
+}
+
 circle {
     fill: none;
     stroke: #ccc;
@@ -1264,6 +1286,7 @@ nav.main-menu {
     border: #cccccc solid 1px;
     padding: 20px 20px;
     font-size: 18px;
+    justify-content: center;
     width: 50%;
 }
 
