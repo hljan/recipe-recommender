@@ -23,9 +23,47 @@
 {% endblock %}
 
 {% block bodyContent %}
+<form action="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
+      method="POST">
+    <button class="tablink" type="submit" name="tab_type" value="recipe">
+        Recommend Recipes
+    </button>
+    <button class="tablink" type="submit" name="tab_type" value="ingredient">
+        Additional Ingredients
+    </button>
+
+    <br>
+    <!--Q2-->
+    <button style="display: none" class="tablink" type="submit" name="tab_type" value="contentBased">
+        Content-Based Filtering
+    </button>
+    <!--Q3-->
+    <button style="display: none" class="tablink" type="submit" name="tab_type" value="collaborative">
+        Collaborative Filtering
+    </button>
+    <!--Q5-->
+    <button style="display: none" class="tablink" type="submit" name="tab_type" value="usedIngredients">
+        Used Ingredients
+    </button>
+    <!--Q7-->
+    <button style="display: none" class="tablink" type="submit" name="tab_type" value="userRatings">
+        User Ratings
+    </button>
+</form>
+
 <div id="recipeGraph"></div>
 
 <script>
+    // handle tab vis
+    var selectedTab = {{tab_type | tojson}},
+        tabLinks = document.getElementsByClassName("tablink");
+
+    for (i = 0; i < tabLinks.length; i++) {
+        if(tabLinks[i].value === selectedTab) {
+            tabLinks[i].disabled = "true";
+        }
+      }
+
     // handle query data
     var graphData = {{result.data | safe}},
         nodes = {},

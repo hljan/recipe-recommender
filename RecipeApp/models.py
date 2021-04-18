@@ -194,6 +194,20 @@ class PyNeoGraph:
         #         """
         # results = self.driver.run(query).to_data_frame()
 
+        results = [
+            {
+                "recipeName": "stuffed peppers with sausage",
+                "recipeID": 434234
+            },
+            {
+                "recipeName": "fresh tomato and roasted garlic salad dressing",
+                "recipeID": 108091
+            }
+        ]
+
+        results = json.dumps(results)
+        results = {'data': results}
+
         return results
 
     def get_relevant_recipes(self, user_id, recipe_id):

@@ -23,15 +23,15 @@ body {
 }
 
 path.nodeLink {
-        fill: none;
-        stroke: grey;
-        stroke-width: 3px;
+    fill: none;
+    stroke: grey;
+    stroke-width: 3px;
 }
 
 circle {
-        fill: none;
-        stroke: #ccc;
-        stroke-width: 2px;
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
 }
 
 a {
@@ -212,13 +212,13 @@ button {
 /**-- heading section --**/
 
 .d3-tooltip {
-            position: absolute;
-            line-height: 1.2;
-            border: 5px;
-            padding: 10px;
-            background: rgba(54, 54, 54, 0.8);
-            color: white;
-            border-radius: 10px;
+    position: absolute;
+    line-height: 1.2;
+    border: 5px;
+    padding: 10px;
+    background: rgba(54, 54, 54, 0.8);
+    color: white;
+    border-radius: 10px;
 }
 
 .app_name {
@@ -1254,6 +1254,38 @@ nav.main-menu {
     box-shadow: #b0b0b0 0px -2px 9px 0px;
 
 
+}
+
+.tablink {
+    background-color: #e08946;
+    color: white;
+    float: left;
+    cursor: pointer;
+    border: #cccccc solid 1px;
+    padding: 20px 20px;
+    font-size: 18px;
+    width: 50%;
+}
+
+.tablink:hover {
+    background-color: #ffcc00;
+    border: #cccccc solid 1px;
+    color: #fff;
+
+}
+
+.tablink:disabled {
+    background-color: #cccccc;
+    border: #cccccc solid 1px;
+    color: #fff;
+
+}
+
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 20px 20px;
+    height: 100%;
 }
 
 .warning_msg {

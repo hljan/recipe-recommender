@@ -29,7 +29,7 @@ def initial_search(user_id):
         side_ingredients = request.form['side_ingredients'][:-1]
 
         if request.form['search_type'] == 'visual_search':
-            return redirect(url_for('visualSearch.matching_recipes', user_id=user_id, tab_type='recipe',
+            return redirect(url_for('visualSearch.matching_recipes', user_id=user_id,
                                     main_ingredients=main_ingredients, side_ingredients=side_ingredients))
         elif request.form['search_type'] == 'text_search':
             return redirect(url_for('textSearch.text_search', user_id=user_id))

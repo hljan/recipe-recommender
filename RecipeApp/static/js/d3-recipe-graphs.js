@@ -1,4 +1,29 @@
 // functions
+function openTab(element, tabName) {
+
+  // var i,
+  //     tabcontent = document.getElementsByClassName("tabcontent"),
+  //     tablinks = document.getElementsByClassName("tablink");
+  //
+  // // hide all tabs by default
+  // for (i = 0; i < tabcontent.length; i++) {
+  //   tabcontent[i].style.display = "none";
+  // }
+  // // show the selected tab
+  // document.getElementById(tabName).style.display = "flex";
+  // if (tabName === "ContentBased" || tabName === "Collaborative") {
+  //   document.getElementById("Recipe").style.display = "flex";
+  // }
+
+
+  // // reset all tabs
+  // for (i = 0; i < tablinks.length; i++) {
+  //   tablinks[i].disabled = false;
+  // }
+  // // toggle selected element
+  element.disabled = true;
+}
+
 function draw_graph_q1(nodes, links, div_id) {
     // define graph size
     var margin = { left: 50, top: 100, right: 100, bottom: 100 },
