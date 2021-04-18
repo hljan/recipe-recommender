@@ -12,8 +12,8 @@ def login():
     if request.method == 'GET':
         return render_template('login.html', user_ids=users['id(u)'])
     elif request.method == 'POST':
-        userid = request.form['user_id']
-        return redirect(url_for('main.initial_search', user_id=userid))
+        user_id = request.form['user_id']
+        return redirect(url_for('main.initial_search', user_id=user_id))
 
 
 @auth.route('/logout')

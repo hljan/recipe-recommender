@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Main Page {% endblock %}
+{% block title %} Text Search {% endblock %}
 
 {% block navbarContent %}
 <ul class="menu-area-main">
@@ -28,7 +28,7 @@
                     </tr>
                     {%  for recipe in matching_recipes %}
                     <tr>
-                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.recipeName}}</a></td>
+                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -41,7 +41,7 @@
                     </tr>
                     {%  for recipe in content_based %}
                     <tr>
-                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.Name}}</a></td>
                         <td>{{ recipe.score }}</td>
                     </tr>
                     {% endfor %}
@@ -54,7 +54,7 @@
                     </tr>
                     {%  for recipe in collab_filter %}
                     <tr>
-                        <td><a href="/recipes/{{ recipe.recipeID }}">{{recipe.Name}}</a></td>
+                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.Name}}</a></td>
                     </tr>
                     {% endfor %}
                 </table>

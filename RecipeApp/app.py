@@ -1,5 +1,5 @@
 from flask import Flask
-
+from models import PyNeoGraph
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +14,8 @@ def create_app():
     app.register_blueprint(text_search_blueprint)
     from visual_search import visualSearch as visual_search_blueprint
     app.register_blueprint(visual_search_blueprint)
+    from display_recipe import displayRecipe as display_recipe_blueprint
+    app.register_blueprint(display_recipe_blueprint)
 
     return app
 
