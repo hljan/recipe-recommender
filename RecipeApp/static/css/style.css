@@ -29,27 +29,26 @@ path.nodeLink {
 }
 
 td {
-    border: 2px solid #ffffff;
+    border: 2px solid #4e463a;
     text-align: left;
     padding: 10px;
     font-size: 14px;
-    background-color: #ece682;
 }
 
 th {
-    border: 2px solid #ffffff;
+    border: 2px solid #4e463a;
     text-align: right;
     padding: 10px;
     font-size: 14px;
     width: 10%;
-    background-color: #ece682;
 }
 
 table {
     font-family: arial, sans-serif;
-    border-collapse: collapse;
+    border: 2px solid #4e463a;
     width: 100%;
     border-radius: 5px;
+    background-color: #ffffff77;
 }
 
 circle {
@@ -156,6 +155,23 @@ img {
 
 :focus {
     outline: 0;
+}
+
+.detailsItem {
+    pointer-events: none;
+    margin-top: 10px;
+    background-color: #ece682;
+    border: 2px solid #dddddd;
+    border-radius: 25px;
+    padding: 6px 20px;
+    font-size: 12px;
+}
+
+#th_recipe_name {
+    color: #fff;
+    background-color: #e68a00;
+    font-size: 20px;
+    padding: 5px;
 }
 
 .btn-custom {
