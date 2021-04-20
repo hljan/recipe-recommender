@@ -28,19 +28,8 @@
 
 {% block bodyContent %}
 <div class="container-fluid padding_dd">
-    <div>
-        {% block breadcrumb %}{% endblock %}
-    </div>
     <div class="row">
-        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4" style="padding-left: 90px;">
-            <div class="text-bg">
-                <h1>My Recent Search</h1>
-                <div class="images_box">
-                    <figure><img src="/static/images/food.jpg"></figure>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8" style="padding-left: 110px;">
+        <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8" style="padding-left: 250px; padding-top: 100px;">
             <div class="text-bg">
                 <h1>Recipe Search</h1>
                 <div id="warning_message" class="warning_msg">
@@ -166,14 +155,14 @@
                                 sideIngredientsId = "";
 
                             for (let i = 0; i < selectedMainIngredients.length; i++) {
-                                mainIngredientsId += selectedMainIngredients[i].id + ",";
+                                mainIngredientsId += selectedMainIngredients[i].id + "&" + selectedMainIngredients[i].value + ",";
                             }
-                            $("#selectedMainIngredients").val(mainIngredientsId);
+                            document.getElementById("selectedMainIngredients").value = mainIngredientsId;
 
                             for (let i = 0; i < selectedSideIngredients.length; i++) {
-                                sideIngredientsId += selectedSideIngredients[i].id + ",";
+                                sideIngredientsId += selectedSideIngredients[i].id + "&" + selectedSideIngredients[i].value + ",";
                             }
-                            $("#selectedSideIngredients").val(sideIngredientsId);
+                            document.getElementById("selectedSideIngredients").value = sideIngredientsId;
                         }
 
                         function isMainIngredientEmpty() {
@@ -182,12 +171,12 @@
                     </script>
                 </form>
                 <div id="error_message" class="error_msg">
-                    The given ingredient has already been selected
+                    The given ingredient has already been selected!
                 </div>
                 {% if not db_connected %}
                     <div id="error_message_db" class="error_msg_db">
                         The graph database is not connected!
-                        Please check your DB connection, logout and login again!
+                        Please check your DB connection and refres this page!
                     </div>
                 {% endif %}
             </div>

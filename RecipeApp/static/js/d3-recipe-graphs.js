@@ -70,7 +70,27 @@ function draw_graph_q1(nodes, links, div_id) {
         .html(function (d) {
             var details = "";
             if (d.id === 0) {
-                details = d.name;
+                details = "Inputs: ";
+                var ingredients = this.baseURI.split("/").slice(-1)[0].split("?").slice(-1)[0],
+                    main = "<br />Main Ingredients: ",
+                    side = "<br />Side Ingredients: ";
+                ingredients = ingredients.split("&");
+
+                for (i = 0; i < ingredients.length; i++) {
+                    if (ingredients[i].split("=")[0] === "main_ingredients") {
+                        var ele = ingredients[i].split("=")[1].split("%26")
+                        for (j = 1; j < ele.length; j++) {
+                            main = main + ele[j].split("%")[0] + "; ";
+                        }
+
+                    } else if (ingredients[i].split("=")[0] === "side_ingredients") {
+                        var ele_2 = ingredients[i].split("=")[1].split("%26");
+                        for (k = 1; k < ele_2.length; k++) {
+                            side = side + ele_2[k].split("%")[0] + "; ";
+                        }
+                    }
+                }
+                details = details + main + side;
             } else {
                 details = "Recipe Name: " + d.name;
             }
@@ -125,8 +145,8 @@ function dblclicked_q1(d) {
     if (recipe_id !== 0) {
         var user_id = window.location.pathname.split('/')[2],
             recipe_name = d.name,
-            recipe = recipe_id + "&" + recipe_name;
-        url = encodeURI("/visualSearch/" + user_id + "/recipe_info/" + recipe);
+            recipe = recipe_id + "%26" + encodeURI(recipe_name);
+        url = encodeURI("/visualSearch/" + user_id + "/recipe_info/") + recipe;
 
         window.location.assign(url);
     }
@@ -235,7 +255,29 @@ function draw_graph_q4(nodes, links, div_id) {
         .html(function (d) {
             var details = "";
             if (d.id === 0) {
-                details = d.name;
+                details = "Inputs: ";
+                var ingredients = this.baseURI.split("/").slice(-1)[0].split("?").slice(-1)[0],
+                    main = "<br />Main Ingredients: ",
+                    side = "<br />Side Ingredients: ";
+                ingredients = ingredients.split("&");
+
+                for (i = 0; i < ingredients.length; i++) {
+                    if (ingredients[i].split("=")[0] === "main_ingredients") {
+                        var ele = ingredients[i].split("=")[1].split("%26")
+                        for (j = 1; j < ele.length; j++) {
+                            var ing_name = ele[j].split("%")[0].replaceAll("+", " ");
+                            main += ing_name + "; ";
+                        }
+
+                    } else if (ingredients[i].split("=")[0] === "side_ingredients") {
+                        var ele_2 = ingredients[i].split("=")[1].split("%26");
+                        for (k = 1; k < ele_2.length; k++) {
+                            var ing_name_2 = ele_2[k].split("%")[0].replaceAll("+", " ");
+                            side += ing_name_2 + "; ";
+                        }
+                    }
+                }
+                details = details + main + side;
             } else {
                 details = "Ingredient Name: " + d.name;
             }
@@ -251,6 +293,7 @@ function draw_graph_q4(nodes, links, div_id) {
         .append("g")
         .attr("class", "node")
         .on("click", clicked_q4)
+        .on("dblclick", dblclicked_q4)
         .on('mouseover', tooltip.show)
         .on('mouseout', tooltip.hide);
 
@@ -287,20 +330,50 @@ function draw_graph_q4(nodes, links, div_id) {
 // click action
 function clicked_q4(d) {
     if (d.id !== 0) {
-        var cfm_btn = document.getElementById("tab_btn_ing_cfm");
-        cfm_btn.disabled = false;
-    }
+        var cfm_btn = document.getElementById("tab_btn_ing_cfm"),
+            add_ing = document.getElementById("addedSideIngredients"),
+            recipe_form = document.getElementById("recipeForm"),
+            add_val = "&side_ingredients=" + d.id + "%26" + d.name.replaceAll(" ", "+"),
+            add_val_ing = d.id + "&" + d.name + ",";
 
-    d3.select(this).select("text").transition()
-        .duration(750)
-        .text(function (d) {
-            if (d.id === 0) {
-                return d.name;
-            } else {
-                return "*" + d.name;
+        if (!recipe_form.action.includes(add_val)) {
+            recipe_form.action += add_val;
+            add_ing.value += add_val_ing;
+
+            cfm_btn.disabled = false;
+            d3.select(this).select("circle").transition()
+                .duration(750)
+                .style("fill", "lightgrey");
+        }
+    }
+}
+;
+
+// dblclick action
+function dblclicked_q4(d) {
+    if (d.id !== 0) {
+        var cfm_btn = document.getElementById("tab_btn_ing_cfm"),
+            add_ing = document.getElementById("addedSideIngredients"),
+            recipe_form = document.getElementById("recipeForm"),
+            add_val = "&side_ingredients=" + d.id + "%26" + d.name.replaceAll(" ", "+"),
+            add_val_ing = d.id + "&" + d.name + ",";
+
+        if (recipe_form.action.includes(add_val)) {
+            recipe_form.action = recipe_form.action.replaceAll(add_val, "");
+            add_ing.value = add_ing.value.replaceAll(add_val_ing, "");
+
+            d3.select(this).select("circle").transition()
+                .duration(750)
+                .style("fill", d3.interpolateRdYlBu(0.75));
+
+            if (add_ing.value === "") {
+                cfm_btn.disabled = true;
             }
-        });
-};
+        }
+    }
+}
+;
+
 
 function draw_graph_q5(nodes, links, div_id) {
     // define graph size
@@ -356,10 +429,10 @@ function draw_graph_q5(nodes, links, div_id) {
         .html(function (d) {
             var details = "";
             if (d.id === 0) {
-                details = "Recipe Name: " + d.name +
-                    "<br />Alternative Ingredients: " + "bla bla bla";
+                details = "Recipe Name: " + d.name;
             } else {
-                details = "Ingredient Name: " + d.name;
+                details = "Ingredient Name: " + d.name +
+                    "<br />Alternative Ingredients: " + d.alt;
             }
 
             return details;
@@ -478,8 +551,7 @@ function draw_graph_q7(nodes, links, div_id) {
         .html(function (d) {
             var details = "";
             if (d.id === 0) {
-                details = "Recipe Name: " + d.name +
-                    "<br />Alternative Ingredients: " + "bla bla bla";
+                details = "Recipe Name: " + d.name;
             } else {
                 details = "User ID: " + d.id +
                     "<br />User " + d.name;

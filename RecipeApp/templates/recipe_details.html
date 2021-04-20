@@ -28,44 +28,49 @@
 {% endblock %}
 
 {% block bodyContent %}
-<div id="recipeDetails">
-    <table id="recipeTable" style="width:100%">
-    <tr>
-        <th colspan="2" id="th_recipe_name" style="text-align: center"></th>
-    </tr>
-    <tr>
-        <th>Steps:</th>
-        <td id="td_steps"></td>
-    </tr>
-    <tr>
-        <th>Calorie Level:</th>
-        <td id="td_calorieLevel"></td>
-    </tr>
-    <tr>
-        <th>Number of Ingredients:</th>
-        <td id="td_numberOfIngredients"></td>
-    </tr>
-    <tr>
-        <th>Nutrition Details:</th>
-        <td id="td_nutritionDetials"></td>
-    </tr>
-    <tr>
-        <th>Tags:</th>
-        <td id="td_tags"></td>
-    </tr>
-    <tr>
-        <th>Average Rating:</th>
-        <td id="td_avgRating"></td>
-    </tr>
-    <tr>
-        <th>Number of Ratings:</th>
-        <td id="td_numberOfRatings"></td>
-    </tr>
-    <tr>
-        <th>Alternative Ingredients:</th>
-        <td id="td_altIngredients"></td>
-    </tr>
-</table>
+<br><br><br>
+<div id="recipeDetails" style="padding-left: 10%; padding-right: 10%">
+    <table id="recipeTable">
+        <tr>
+            <th colspan="2" id="th_recipe_name" style="text-align: center"></th>
+        </tr>
+        <tr>
+            <th>Steps:</th>
+            <td id="td_steps"></td>
+        </tr>
+        <!--    <tr>-->
+        <!--        <th>Calorie Level:</th>-->
+        <!--        <td id="td_calorieLevel"></td>-->
+        <!--    </tr>-->
+        <tr>
+            <th>Number of Ingredients:</th>
+            <td id="td_numberOfIngredients"></td>
+        </tr>
+        <tr>
+            <th>Ingredients:</th>
+            <td id="td_ingredients"></td>
+        </tr>
+        <tr>
+            <th>Nutrition Details:</th>
+            <td id="td_nutritionDetials"></td>
+        </tr>
+        <tr>
+            <th>Tags:</th>
+            <td id="td_tags"></td>
+        </tr>
+        <tr>
+            <th>Average Rating:</th>
+            <td id="td_avgRating"></td>
+        </tr>
+        <tr>
+            <th>Number of Ratings:</th>
+            <td id="td_numberOfRatings"></td>
+        </tr>
+        <tr>
+            <th>Alternative Ingredients:</th>
+            <td id="td_altIngredients"></td>
+        </tr>
+    </table>
 </div>
 
 <script>
@@ -73,13 +78,15 @@
         recipe_info = {{ recipe | tojson }}.split('&'),
         recipe_name = decodeURI(recipe_info[1]);
 
-    document.getElementById("th_recipe_name").innerHTML = recipe_name;
+    document.getElementById("th_recipe_name").innerHTML = "Recipe: " + recipe_name;
 
     for (const key in recipeData[0] ) {
-        var td_id = "td_" + `${key}`,
+        if (`${key}` !== "calorieLevel") {
+            var td_id = "td_" + `${key}`,
             td_ele =  document.getElementById(td_id);
 
-        td_ele.innerHTML = `${recipeData[0][key]}`;
+            td_ele.innerHTML = `${recipeData[0][key]}`;
+        }
     }
 </script>
 {% endblock %}

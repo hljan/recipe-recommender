@@ -13,7 +13,7 @@ body {
     line-height: 1.80857;
     font-weight: normal;
     overflow-x: hidden;
-    background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.15)), url('../images/background.jpg');
+    background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.85)), url('../images/background.jpg');
     background-size: cover;
     background-attachment: fixed;
 }
@@ -28,26 +28,28 @@ path.nodeLink {
     stroke-width: 3px;
 }
 
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
 td {
-  border: 2px solid #ffffff;
-  text-align: left;
-  padding: 10px;
-  font-size: 14px;
-  background-color: #ece682;
+    border: 2px solid #ffffff;
+    text-align: left;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #ece682;
 }
 
 th {
-  border: 2px solid #ffffff;
-  text-align: right;
-  padding: 10px;
-  font-size: 14px;
-  background-color: #ece682;
+    border: 2px solid #ffffff;
+    text-align: right;
+    padding: 10px;
+    font-size: 14px;
+    width: 10%;
+    background-color: #ece682;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 5px;
 }
 
 circle {
