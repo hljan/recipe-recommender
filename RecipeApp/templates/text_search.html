@@ -16,19 +16,22 @@
 {% endblock %}
 {% block bodyContent %}
     <div class="column is-6 is-offset-2 box">
+
                 <h1>Your Recommended Recipes!</h1>
                 <hr>
                 <h6>Main ingredients: {% for ingredient in main_ingredients %} {{ ingredient }} {% endfor %}</h6>
                 <h6>Side ingredients: {% for ingredient in side_ingredients %} {{ ingredient }} {% endfor %}</h6>
                 <hr>
                 <h5><strong>Matching Recipes</strong></h5>
+
                 <table>
                     <tr>
                         <th>Name</th>
                     </tr>
                     {%  for recipe in matching_recipes %}
+                        {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName%}
                     <tr>
-                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
+                        <td><a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
                     </tr>
                     {% endfor %}
                 </table>
