@@ -66,26 +66,59 @@
             <th>Number of Ratings:</th>
             <td id="td_numberOfRatings"></td>
         </tr>
-        <tr>
-            <th>Alternative Ingredients:</th>
-            <td id="td_altIngredients"></td>
-        </tr>
+        <!--        <tr>-->
+        <!--            <th>Alternative Ingredients:</th>-->
+        <!--            <td id="td_altIngredients"></td>-->
+        <!--        </tr>-->
     </table>
 </div>
 
 <script>
-    var recipeData = {{ result.data | safe }},
+    // var recipeData = {{ result.data | safe }},
+    var groupData = {{ result.data | tojson }}.split(";"),
+        recipeData = eval(groupData[0]),
+        ingredients = eval(groupData[1]),
+        alt_ingredients = eval(groupData[2]),
+        alt_ing_val = "",
         recipe_info = {{ recipe | tojson }}.split('&'),
-        recipe_name = decodeURI(recipe_info[1]);
+        recipe_name = decodeURI(recipe_info[1]),
+        th_ing = document.getElementById("td_ingredients");
 
     document.getElementById("th_recipe_name").innerHTML = "Recipe: " + recipe_name;
 
-    for (const key in recipeData[0] ) {
+
+    alt_ingredients.forEach(function (alt) {
+        alt_ing_val += alt.ingredientName + "; ";
+    });
+    for (i = 0; i < ingredients.length; i++) {
+        th_ing.innerHTML += "- " + ingredients[i].ingredientName + " ( " + alt_ing_val.substr(0, alt_ing_val.length - 2) + " )<br> ";
+    }
+
+    for (const key in recipeData[0]) {
         if (`${key}` !== "calorieLevel") {
             var td_id = "td_" + `${key}`,
-            td_ele =  document.getElementById(td_id);
+                td_ele = document.getElementById(td_id),
+                ele_arr;
 
-            td_ele.innerHTML = `${recipeData[0][key]}`;
+            if (`${key}` === "steps") {
+                ele_arr = eval(`${recipeData[0][key]}`);
+                for (i = 0; i < ele_arr.length; i++) {
+                    td_ele.innerHTML += (i + 1) + ". " + ele_arr[i] + "<br />";
+                }
+            } else if (`${key}` === "tags") {
+                ele_arr = eval(`${recipeData[0][key]}`);
+                for (i = 0; i < ele_arr.length; i++) {
+                    td_ele.innerHTML += "<button class='detailsItem'>" + ele_arr[i] + "</button> ";
+                }
+            } else if (`${key}` === "nutritionDetials") {
+                ele_arr = `${recipeData[0][key]}`;
+                ele_arr = JSON.parse(ele_arr.replaceAll("\'", "\""));
+                for (const nutr in ele_arr) {
+                    td_ele.innerHTML += "<button class='detailsItem'>" + `${nutr}` + ": " + `${ele_arr[nutr]}` + "</button> ";
+                }
+            } else {
+                td_ele.innerHTML = `${recipeData[0][key]}`;
+            }
         }
     }
 </script>

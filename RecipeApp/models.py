@@ -375,7 +375,7 @@ class PyNeoGraph:
         results = [
             {
                 "ingredientName": "basil",
-                "ingredientID": 382
+                "ingredientID": 382,
             },
             {
                 "ingredientName": "parmesan cheese",
