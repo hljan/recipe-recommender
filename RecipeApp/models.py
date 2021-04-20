@@ -375,6 +375,33 @@ class PyNeoGraph:
 
         return results
 
+    def get_alternative_ingredients(self, recipe_id):
+        # TODO: implement the query Q8
+        # query = """
+        #         """
+        # results = self.driver.run(query).to_data_frame()
+        # results = json.dumps(driver.run(query).data())
+
+        results = [
+            {
+                "ingredientName": "basil",
+                "ingredientID": 382
+            },
+            {
+                "ingredientName": "parmesan cheese",
+                "ingredientID": 5180
+            },
+            {
+                "ingredientName": "red wine vinegar",
+                "ingredientID": 6009
+            }
+        ]
+
+        results = json.dumps(results)
+        results = {'data': results}
+
+        return results
+
     def get_relevant_ratings(self, user_id, recipe_id):
         # TODO: implement the query Q7
         # query = """

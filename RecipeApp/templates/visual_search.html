@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block bodyContent %}
-<form style="margin-left:1em" action="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
+<form id="recipeForm" style="margin-left:1em" action="{{ url_for('visualSearch.matching_recipes', user_id=user_id, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}"
       method="POST">
     <button id="tab_btn_rec" class="tablink" type="submit" name="tab_type" value="recipe">
         Recommend Recipes
@@ -47,14 +47,17 @@
 
     <div style="padding-left: 41.5%; padding-right: 25%">
         <!--Q4 Confirm-->
-        <button id="tab_btn_ing_cfm" style="display: none" class="tablink" type="submit" name="tab_type" value="ingredient"
+        <button id="tab_btn_ing_cfm" style="display: none" class="tablink" type="submit" name="tab_type" value="add_ingredient"
                 disabled=true>
             Confirm Selection
         </button>
     </div>
+    <input style="display: none" id="addedSideIngredients" type="text" name="add_ingredients">
 </form>
 
+<!--<input type="text" name="side_ingredients" id="addedSideIngredients">-->
 <div id="recipeGraph"></div>
+
 
 <script>
     // handle tab vis
