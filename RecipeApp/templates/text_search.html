@@ -32,31 +32,5 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <hr>
-                <h5><strong>Content Based Filter</strong></h5>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Score</th>
-                    </tr>
-                    {%  for recipe in content_based %}
-                    <tr>
-                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.Name}}</a></td>
-                        <td>{{ recipe.score }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <hr>
-                <h5><strong>Collaborative Filter</strong></h5>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    {%  for recipe in collab_filter %}
-                    <tr>
-                        <td><a href="{{ url_for('displayRecipe.display_recipe', recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.Name}}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
             </div>
 {% endblock %}

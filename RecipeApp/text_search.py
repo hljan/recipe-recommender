@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, render_template, request
 from flask_login import login_required
 
-from models import PyNeoGraph, get_recipes
+from models import PyNeoGraph
 
 textSearch = Blueprint('textSearch', __name__)
 main_ingredients = ''
@@ -26,7 +26,6 @@ def text_search(user_id):
     if not driver_neo4j:
         driver_neo4j = PyNeoGraph(debug=True)
 
-    content_based, collab_filter = get_recipes()
     results = driver_neo4j.get_matching_recipes(main_ingredients, side_ingredients)
 
     matching_recipes =[]
@@ -35,6 +34,5 @@ def text_search(user_id):
         matching_recipes = json.loads(results[data])
 
     return render_template('text_search.html',user_id=user_id, matching_recipes=matching_recipes,
-                           matching_recipes_1=matching_recipes, content_based=content_based,
-                           collab_filter=collab_filter, main_ingredients=main_ingredients,
+                           main_ingredients=main_ingredients,
                            side_ingredients=side_ingredients)
