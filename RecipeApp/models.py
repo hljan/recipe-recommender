@@ -106,49 +106,62 @@ class PyNeoGraph:
         """
 
         main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
+        main_ingredients = self.get_neo4j_id(in_list=main_ingredients)
 
         try:
             side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+            side_ingredients = self.get_neo4j_id(in_list=side_ingredients)
         except ValueError as e:  # no side_ingredients
 
             query = """
             MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
             WITH r,
-                collect(id(i)) AS ingredients,
+                collect(DISTINCT id(i)) AS ingredients,
                 $main_ingredients AS main, // user input
             WHERE all(x IN main
                 WHERE (x IN ingredients))
             WITH r.name as RecipeName, id(r) as ID
             ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
             WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-            RETURN result[0..9]
+            RETURN result[0..10]
             """
 
             params = {"main_ingredients": main_ingredients}
-            results = self.driver.run(query, params).data()
 
-            return results
+            return query, params
+            # res = self.driver.run(query, params)
+                
+            # results = res.data()
+            # # results = results[0]["result[0..10]"]
+            # # results = json.dumps(results)
+            # # results = {'data': results}
+
+            # return results
+
 
         query = """
-        MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
-        WITH r,
-            collect(id(i)) AS ingredients,
-            $main_ingredients AS main, // user input
-            $side_ingredients AS side // user input
-        WHERE all(x IN main
-            WHERE (x IN ingredients))
-            AND any(x IN side
-            WHERE (x IN ingredients))
-        WITH r.name as RecipeName, id(r) as ID
-        ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
+        MATCH 
+        (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+        WITH
+        r, collect(DISTINCT id(i)) AS ingredients,
+        $main_ingredients AS main, $side_ingredients AS side
+        WHERE 1=1
+        and all(x IN main WHERE (x IN ingredients))
+        and any(x IN side WHERE (x IN ingredients))
+        WITH r.name as RecipeName, r.recipe as ID
+        ORDER BY size([x IN side WHERE x IN ingredients]) DESC, r.n_ingredients
         WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
         RETURN result[0..10]
         """
+
         params = {"main_ingredients": main_ingredients,
                   "side_ingredients": side_ingredients}
+
         res = self.driver.run(query, params)
+
         
         results = res.data()
+
         results = results[0]["result[0..10]"]
         results = json.dumps(results)
         results = {'data': results}
@@ -201,6 +214,83 @@ class PyNeoGraph:
                     {
                         "recipeName": "pasta w  garlic and veggies",
                         "recipeID": 46991
+                    }
+                ]
+            }
+        ]
+
+        results = results[0]["result[0..9]"]
+        results = json.dumps(results)
+        results = {'data': results}
+
+        return results
+
+    def get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
+  
+        query = """
+        //Q2_Content based filtering
+        MATCH//Find recipes similar to recpies rated by user (ID) #2203 and get their ingredients.
+        (u:USER{user:$user})-[:RATED]->(r:RECIPE)-[s:SIMILAR]->(r2:RECIPE)-[:CONTAINS]->(i:INGREDIENT)
+        WITH //save user_id, user rated recipes ( r ) and recipes similar to ( r ) along with a list of their aggregate ingredients
+        u,r,r2,collect(DISTINCT id(i)) AS ingredients,
+        count(r2.recipe) AS recipeCount, s.sim_score AS score, $main_ingredients AS main, $side_ingredients AS side
+        WHERE 1=1 //filter only for recipes containing ALL main & ANY of the side ingredients
+        and all(x IN main WHERE (x IN ingredients)) //all main
+        and any(x IN side WHERE (x IN ingredients)) //any side
+        WITH //return user_id, user_name, recipe rated by user, recommended recipe, similarity score and ingredient list in recommended recipe and calc number of matching ingredients in each recpie (no_sideIngr)
+        u.user as user_id, r2.name as RecipeName, r.recipe as ID1, r2.recipe AS ID, r.name AS Name,ingredients, size([x IN side WHERE x IN ingredients]) as No_SideIngr, score
+        ORDER BY No_SideIngr DESC, score DESC
+        WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+        RETURN result[0..10]
+        """
+
+        main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
+        main_ingredients = self.get_neo4j_id(in_list=main_ingredients)
+
+  
+        side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+        side_ingredients = self.get_neo4j_id(in_list=side_ingredients)
+
+        params = {"main_ingredients": main_ingredients,
+                  "side_ingredients": side_ingredients,
+                  "user": user_id}
+        res = self.driver.run(query, params).data()
+        return res
+        # results = res[0]["result[0..10]"]
+        # results = json.dumps(results)
+        # results = {'data': results}
+
+        # return results
+
+    def test_get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
+  
+        query = """
+        //Q2_Content based filtering
+        MATCH//Find recipes similar to recpies rated by user (ID) #2203 and get their ingredients.
+        (u:USER{user:2203})-[:RATED]->(r:RECIPE)-[s:SIMILAR]->(r2:RECIPE)-[:CONTAINS]->(i:INGREDIENT)
+        WITH//save user_id, user rated recipes ( r ) and recipes similar to ( r ) along with a list of their aggregate ingredients
+        u,r,r2,collect(DISTINCT i.ingredient) AS ingredients, count(r2.recipe) AS recipeCount,
+        s.sim_score AS score, [7213, 3184] AS main, [1170, 382, 5006] AS side
+        WHERE 1=1 //filter only for recipes containing ALL main & ANY of the side ingredients
+        and all(x IN main WHERE (x IN ingredients)) //all main
+        and any(x IN side WHERE (x IN ingredients)) //any side
+        WITH //return user_id, user_name, recipe rated by user, recommended recipe, similarity score and ingredient list in recommended recipe and calc number of matching ingredients in each recpie (no_sideIngr)
+        u.user as user_id, r2.name as RecipeName, r.recipe as ID1, r2.recipe AS ID, r.name AS Name,ingredients, size([x IN side WHERE x IN ingredients]) as No_SideIngr, score
+        ORDER BY No_SideIngr DESC, score DESC
+        WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+        RETURN result[0..10]
+                """
+
+        results = [
+            {
+                "result[0..9]": [ # TODO: change to 0..10 in UI
+                    {
+                        "recipeName": "zucchini packets for the grill",
+                        "recipeID": 41087
+                    },
+                    {
+                        "recipeName": "nancy duke s ratatouille",
+                        "recipeID": 93260
                     }
                 ]
             }
@@ -268,33 +358,7 @@ class PyNeoGraph:
 
         return results
 
-    def get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
-        # TODO: implement the query Q2
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
-
-        results = [
-            {
-                "result[0..9]": [
-                    {
-                        "recipeName": "zucchini packets for the grill",
-                        "recipeID": 41087
-                    },
-                    {
-                        "recipeName": "nancy duke s ratatouille",
-                        "recipeID": 93260
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["result[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
+    
 
     def get_collaborative_recipes(self, user_id, main_ingredients, side_ingredients):
         # TODO: implement the query Q3

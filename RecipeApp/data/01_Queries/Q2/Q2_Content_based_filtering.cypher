@@ -10,4 +10,4 @@ WITH //return user_id, user_name, recipe rated by user, recommended recipe, si
 u.user as user_id, r2.name as RecipeName, r.recipe as ID1, r2.recipe AS ID, r.name AS Name,ingredients, size([x IN side WHERE x IN ingredients]) as No_SideIngr, score
 ORDER BY No_SideIngr DESC, score DESC
 WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-RETURN result[0..9]
+RETURN result[0..10]
