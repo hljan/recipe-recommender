@@ -11,6 +11,7 @@
         Q5 - recipe-related ingredients (input is recipe-id (and user-id?))
         
 """
+
 import json
 
 import pandas as pd
@@ -70,7 +71,7 @@ class PyNeoGraph:
     def close(self):
         self.driver.close()
 
-    def get_neo4j_id(self, node="(i:INGREDIENT)", in_list=[7213, 3184]):
+    def get_neo4j_id(self, node="i:INGREDIENT", in_list=None):
         """
             Args:
                 node(str): string in Cypher node format
@@ -78,61 +79,90 @@ class PyNeoGraph:
                 in_list(list): list of raw ids to match nodes
 
             Returns:
-                ids(list): list of neo4j id fields for nodes
-
+                ids(list): list of neo4j id properties for nodes
         """
 
         node_var, label = f"{node}".split(':')
 
         query = f"""
-            MATCH {node}
+            MATCH ({node})
             WHERE {node_var}.{label.lower()} IN {in_list}
             RETURN id({node_var})
         """
 
         return self.driver.run(query).to_series().to_list()
 
-    # def get_matching_recipes(self, main_ingredients=[7213, 3184], side_ingredients=[1170, 382, 5006]):
-    #     """
-    #         Args:
-    #             main_ingredints(list[int]): list of main_ingredient raw_ids
-    #             side_ingredient(list[int]): list of side_ingredient raw_ids
-    #
-    #         Returns:
-    #             results(list[dict]): list of matching recipes that contain main and side
-    #                 ingredients
-    #     """
-    #
-    #     main_ingredients = self.get_neo4j_id(in_list=main_ingredients)
-    #     side_ingredients = self.get_neo4j_id(in_list=side_ingredients)
-    #
-    #     query = """
-    #     MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
-    #     WITH r,
-    #         collect(id(i)) AS ingredients,
-    #         $main_ingredients AS main, // user input
-    #         $side_ingredients AS side // user input
-    #     WHERE all(x IN main
-    #         WHERE (x IN ingredients))
-    #         AND any(x IN side
-    #         WHERE (x IN ingredients))
-    #     WITH r.name as RecipeName, id(r) as ID
-    #     ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
-    #     WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-    #     RETURN result[0..9]
-    #     """
-    #
-    #     results = self.driver.run(query, {"main_ingredients": main_ingredients,
-    #                                       "side_ingredients": side_ingredients})
-    #     return results.data()
-
     def get_matching_recipes(self, main_ingredients, side_ingredients):
+        """
+
+            Args:
+                main_ingredints(list[str]): list of main_ingredient raw_ids and names
+                    ['7213&tomato'] etc
+                side_ingredient(list[int]): list of side_ingredient raw_ids and names
+
+            Returns:
+                results(list[dict]): list of matching recipes that contain main and side
+                    ingredients
+        """
+
+        main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
+
+        try:
+            side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+        except ValueError as e:  # no side_ingredients
+
+            query = """
+            MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+            WITH r,
+                collect(id(i)) AS ingredients,
+                $main_ingredients AS main, // user input
+            WHERE all(x IN main
+                WHERE (x IN ingredients))
+            WITH r.name as RecipeName, id(r) as ID
+            ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
+            WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+            RETURN result[0..9]
+            """
+
+            params = {"main_ingredients": main_ingredients}
+            results = self.driver.run(query, params).data()
+
+            return results
+
+        query = """
+        MATCH path=(i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+        WITH r,
+            collect(id(i)) AS ingredients,
+            $main_ingredients AS main, // user input
+            $side_ingredients AS side // user input
+        WHERE all(x IN main
+            WHERE (x IN ingredients))
+            AND any(x IN side
+            WHERE (x IN ingredients))
+        WITH r.name as RecipeName, id(r) as ID
+        ORDER BY size([x IN side WHERE (x) IN ingredients]) DESC, r.n_ingredients
+        WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+        RETURN result[0..10]
+        """
+        params = {"main_ingredients": main_ingredients,
+                  "side_ingredients": side_ingredients}
+        res = self.driver.run(query, params)
+        
+        results = res.data()
+        results = results[0]["result[0..10]"]
+        results = json.dumps(results)
+        results = {'data': results}
+
+        return results
+
+    def test_get_matching_recipes(self, main_ingredients, side_ingredients):
+        """
+        """
         # TODO: implement the query Q1
         # query = """
         #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
 
+        # recipeName
         results = [
             {
                 "result[0..9]": [

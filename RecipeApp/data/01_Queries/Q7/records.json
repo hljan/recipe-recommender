@@ -1,0 +1,42 @@
+﻿[
+  {
+    "result[0..9]": [
+      {
+        "rating": "5.0",
+        "userID": 4407
+      },
+      {
+        "rating": "5.0",
+        "userID": 4760
+      },
+      {
+        "rating": "5.0",
+        "userID": 10
+      },
+      {
+        "rating": "0.0",
+        "userID": 317
+      },
+      {
+        "rating": "5.0",
+        "userID": 325
+      },
+      {
+        "rating": "5.0",
+        "userID": 358
+      },
+      {
+        "rating": "4.0",
+        "userID": 395
+      },
+      {
+        "rating": "4.0",
+        "userID": 8321
+      },
+      {
+        "rating": "5.0",
+        "userID": 5132
+      }
+    ]
+  }
+]

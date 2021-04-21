@@ -30,7 +30,8 @@ def matching_recipes(user_id):
         side_ingredients = list(set(side_ingredients.split(",")))
 
     if not driver_neo4j:
-        driver_neo4j = PyNeoGraph(debug=True)
+        # driver_neo4j = PyNeoGraph(debug=True)
+        driver_neo4j = PyNeoGraph()
 
     if tab_type == 'add_ingredient':
         add_ingredients = request.form['add_ingredients']
@@ -40,6 +41,7 @@ def matching_recipes(user_id):
 
     if tab_type == 'recipe':
         result = driver_neo4j.get_matching_recipes(main_ingredients, side_ingredients)
+        pdb.set_trace()
     elif tab_type == 'ingredient':
         result = driver_neo4j.get_additional_ingredients(main_ingredients, side_ingredients)
     elif tab_type == 'contentBased':
