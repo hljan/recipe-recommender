@@ -2,78 +2,170 @@
 {% block title %} Text Search {% endblock %}
 
 {% block navbarContent %}
-<ul class="menu-area-main">
-    <li>User ID: {{ user_id }}</li>
-    <li class="active">
-        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
-    </li>
-    <li>
-        <a href="{{ url_for('auth.logout') }}">
-            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
-        </a>
-    </li>
-</ul>
+    <ul class="menu-area-main">
+        <li>User ID: {{ user_id }}</li>
+        <li class="active">
+            <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
+        </li>
+        <li>
+            <a href="{{ url_for('auth.logout') }}">
+                <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+            </a>
+        </li>
+    </ul>
 {% endblock %}
+
 {% block bodyContent %}
-    <div class="column is-6 is-offset-2 box">
 
-                <h1>Your Recommended Recipes!</h1>
-                <hr>
-                <h6>Main ingredients: {% for ingredient in main_ingredients %} {{ ingredient }} {% endfor %}</h6>
-                <h6>Side ingredients: {% for ingredient in side_ingredients %} {{ ingredient }} {% endfor %}</h6>
-                <hr>
+    <div style="padding-left: 8%; padding-right: 8%">
+        <div class="ts-header">
+        <div class="ts-title">Bon Appetit</div>
+    </div>
+    <div class="ts-indicators">
+        <div id="i1">
+            <div class="navi-indicator" id="ni1"></div>
+        </div>
+        <div id="i2">
+            <div class="navi-indicator" id="ni2"></div>
+        </div>
+        <div id="i3">
+            <div class="navi-indicator" id="ni3"></div>
+        </div>
+        <div id="i4">
+            <div class="navi-indicator" id="ni4"></div>
+        </div>
+    </div>
 
-                <div class="tab">
-                    <button class="tablinks" onclick="openTab(event,'matching_recipe')">Matching Recipes</button>
-                    <button class="tablinks" onclick="openTab(event,'content_based')">Filtered By My Review History</button>
-                    <button class="tablinks" onclick="openTab(event,'collab_filter')">Similar User's Reviews</button>
-                </div>
+    <div class="navi">
+        <div class="navi-item1">
+            <button onclick="toggle_div(event, 'matching_recipe')" class="nav-button" id="matching_recipe_btn">
+                <div class="navi-icon"><i class="fas fa-seedling"></i></div>
+                <div class="navi-text">Matching Recipes</div>
+            </button>
+        </div>
+        <div class="navi-item2">
+            <button onclick="toggle_div(event, 'content_based')" class="nav-button" id="content_based_btn">
+                <div class="navi-icon"><i class="fas fa-pizza-slice"></i></div>
+                <div class="navi-text">Filtered By My Review History</div>
+            </button>
+        </div>
+        <div class="navi-item3">
+            <button onclick="toggle_div(event, 'collab_filter')" class="nav-button" id="collab_filter_btn">
+                <div class="navi-icon"><i class="fas fa-ice-cream"></i></div>
+                <div class="navi-text">Filtered By Similar User's Reviews</div>
+            </button>
+        </div>
+    </div>
+    </div>
 
-                <div class="tabcontent" id="matching_recipe">
-                    <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
-                    <table>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    {%  for recipe in matching_recipes %}
-                        {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName%}
-                    <tr>
-                        <td><a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+    <div style="padding-left: 10%; padding-right: 10%">
+        <div style="display: block" class="menu" id="matching_recipe">
+        {% for recipe in matching_recipes %}
+            {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+                <div class="menu-item">
+                    <div class="menu-item-name">{{ recipe.recipeName }}</div>
                 </div>
-                <div class="tabcontent" id="content_based">
-                    <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
-                    <table>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    {%  for recipe in content_based %}
-                    {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName%}
-                    <tr>
-                        <td><a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                </div>
+            </a>
+        {% endfor %}
+    </div>
 
-                <div class="tabcontent" id="collab_filter">
-                    <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
-                    <table>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    {%  for recipe in collab_filter %}
-                    {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName%}
-                    <tr>
-                        <td><a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{recipe.recipeName}}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+    <div class="menu" id="content_based">
+        {% for recipe in content_based %}
+            {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+                <div class="menu-item">
+                    <div class="menu-item-name">{{ recipe.recipeName }}</div>
                 </div>
-            </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="menu" id="collab_filter">
+        {% for recipe in collab_filter %}
+            {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+                <div class="menu-item">
+                    <div class="menu-item-name">{{ recipe.recipeName }}</div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    </div>
+
     <script>
+        function toggle_div(evt, div_name) {
+            var div_content = document.getElementsByClassName("menu");
+            for (i = 0; i < div_content.length; i++) {
+                div_content[i].style.display = "none";
+            }
+
+            document.getElementById(div_name).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+{% endblock %}
+
+<div class="column is-6 is-offset-2 box">
+
+    <h1>Your Recommended Recipes!</h1>
+    <hr>
+    <h6>Main ingredients: {% for ingredient in main_ingredients %} {{ ingredient }} {% endfor %}</h6>
+    <h6>Side ingredients: {% for ingredient in side_ingredients %} {{ ingredient }} {% endfor %}</h6>
+    <hr>
+
+    <div class="tabcontent" id="matching_recipe">
+        <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            {% for recipe in matching_recipes %}
+                {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{ recipe.recipeName }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="tabcontent" id="content_based">
+        <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            {% for recipe in content_based %}
+                {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{ recipe.recipeName }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="tabcontent" id="collab_filter">
+        <span onclick="this.parentElement.style.display='none'" class="topright">&times;</span>
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            {% for recipe in collab_filter %}
+                {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">{{ recipe.recipeName }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<script>
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -92,7 +184,7 @@
     var i;
 
     for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
+        coll[i].addEventListener("click", function () {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
             if (content.style.display === "block") {
@@ -103,5 +195,3 @@
         });
     }
 </script>
-{% endblock %}
-
