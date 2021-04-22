@@ -13,11 +13,11 @@
 """
 
 import json
-
 import pandas as pd
 from py2neo import Graph
-
 from tests import PyNeoGraphUI
+
+
 # import pdb
 
 
@@ -316,9 +316,8 @@ class PyNeoGraph:
                 """
 
         params = {"recipe_id": recipe_id}
-        res = self.driver.run(query, params).data()
+        results = self.driver.run(query, params).data()
 
-        results = res[0]
         results = json.dumps(results)
         results = {'data': results}
         return results
@@ -408,4 +407,5 @@ class PyNeoGraph:
         params = {'recipe_id': recipe_id}
         results = self.driver.run(query, params).data()
         results = json.dumps(results)
+        results = {'data': results}
         return results

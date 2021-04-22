@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from models import get_csv_dict, PyNeoGraph
-import pdb
+
+# import pdb
 
 main = Blueprint('main', __name__)
 ingredients_dict = dict()
@@ -56,7 +57,6 @@ def recipe_details(user_id, recipe):
     result_2 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
     result_3 = driver_neo4j.get_alternative_ingredients(int(recipe_id))
     result = {'data': result_1['data'] + ";" + result_2['data'] + ";" + result_3['data']}
-    # result = driver_neo4j.get_recipe_details(recipe_id)
 
     return render_template('recipe_details.html', user_id=user_id, recipe=recipe_decode, result=result,
                            main_ingredients=main_ingredients, side_ingredients=side_ingredients)

@@ -1,8 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from models import get_users
 
-# from flask_login import login_required
-
 auth = Blueprint('auth', __name__)
 
 
@@ -17,6 +15,5 @@ def login():
 
 
 @auth.route('/logout')
-# @login_required
 def logout():
     return redirect(url_for('auth.login'))

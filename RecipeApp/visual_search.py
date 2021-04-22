@@ -9,7 +9,6 @@ driver_neo4j = list()
 
 
 @visualSearch.route('/visualSearch/<user_id>/matching_recipes', methods=['GET', 'POST'])
-# @login_required
 def matching_recipes(user_id):
     global main_ingredients, side_ingredients, driver_neo4j
 
@@ -52,7 +51,6 @@ def matching_recipes(user_id):
 
 
 @visualSearch.route('/visualSearch/<user_id>/recipe_info/<recipe>', methods=['GET', 'POST'])
-# @login_required
 def recipe_info(user_id, recipe):
     global main_ingredients, side_ingredients, driver_neo4j
 

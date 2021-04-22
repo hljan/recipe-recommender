@@ -38,10 +38,6 @@
             <th>Steps:</th>
             <td id="td_steps"></td>
         </tr>
-        <!--    <tr>-->
-        <!--        <th>Calorie Level:</th>-->
-        <!--        <td id="td_calorieLevel"></td>-->
-        <!--    </tr>-->
         <tr>
             <th>Number of Ingredients:</th>
             <td id="td_numberOfIngredients"></td>
@@ -66,15 +62,10 @@
             <th>Number of Ratings:</th>
             <td id="td_numberOfRatings"></td>
         </tr>
-        <!--        <tr>-->
-        <!--            <th>Alternative Ingredients:</th>-->
-        <!--            <td id="td_altIngredients"></td>-->
-        <!--        </tr>-->
     </table>
 </div>
 
 <script>
-    // var recipeData = {{ result.data | safe }},
     var groupData = {{ result.data | tojson }}.split(";"),
         recipeData = eval(groupData[0]),
         ingredients = eval(groupData[1]),

@@ -3,8 +3,8 @@ import json
 from flask import Blueprint, render_template, request
 from flask_login import login_required
 
-from .models import PyNeoGraph
-from .tests import PyNeoGraphUI
+from models import PyNeoGraph
+from tests import PyNeoGraphUI
 
 textSearch = Blueprint('textSearch', __name__)
 main_ingredients = list()
