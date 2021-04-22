@@ -5628,18 +5628,10 @@ a.box:active {
 }
 
 .ts-header {
-    grid-column-start: 1;
-    grid-column-end: 1;
-    grid-row-start: 1;
-    grid-row-end: 2;
     font-family: "Dancing Script", cursive;
 }
 
 .ts-title {
-    width: 100%;
-    height: 100%;
-    line-height: 150px;
-    font-size: 70px;
     text-align: center;
 }
 
@@ -5726,11 +5718,12 @@ a.box:active {
     height: 70px;
     width: 70px;
     border-radius: 20px;
-    background: linear-gradient(145deg, #e6e4da, #ffffff);
-    box-shadow: 6px 6px 10px #cfcdc4, -6px -6px 10px #ffffff;
+    background-color: #e08946;
     font-family: "Rubik", sans-serif;
     font-weight: 700;
     cursor: pointer;
+    color: white;
+    float: left;
 }
 
 #matching_recipe .navi-icon {
@@ -5889,5 +5882,5 @@ select:focus {
 a,
 a:link,
 a:visited {
-    color: purple;
+    color: #e68a00;
 }
