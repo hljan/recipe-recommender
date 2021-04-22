@@ -16,11 +16,9 @@ import json
 
 import pandas as pd
 from py2neo import Graph
-from neo4j import GraphDatabase
+
+from .tests import PyNeoGraphUI
 import pdb
-
-
-# TODO: move this to different file
 
 
 def get_csv_dict(path='data/ingredient_autocomplete.csv'):
@@ -55,6 +53,9 @@ class PyNeoGraph:
         """
         if not debug:
             self.driver = Graph(bolt=True, host='localhost')
+        else:
+            graph_fixture = PyNeoGraphUI()
+            return graph_fixture
 
     def test_conn(self):
         query = """
@@ -166,63 +167,6 @@ class PyNeoGraph:
 
         return results
 
-    def test_get_matching_recipes(self, main_ingredients, side_ingredients):
-        """
-        """
-        # TODO: implement the query Q1
-        # query = """
-        #         """
-
-        # recipeName
-        results = [
-            {
-                "result[0..9]": [
-                    {
-                        "recipeName": "stuffed peppers with sausage",
-                        "recipeID": 434234
-                    },
-                    {
-                        "recipeName": "strip salad",
-                        "recipeID": 41284
-                    },
-                    {
-                        "recipeName": "fresh tomato and roasted garlic salad dressing",
-                        "recipeID": 108091
-                    },
-                    {
-                        "recipeName": "spinach and mushroom pizza",
-                        "recipeID": 39912
-                    },
-                    {
-                        "recipeName": "linguine with tomatoes and basil",
-                        "recipeID": 110808
-                    },
-                    {
-                        "recipeName": "zucchini packets for the grill",
-                        "recipeID": 41087
-                    },
-                    {
-                        "recipeName": "roasted tomato salad",
-                        "recipeID": 63172
-                    },
-                    {
-                        "recipeName": "linguini alla cecca",
-                        "recipeID": 27118
-                    },
-                    {
-                        "recipeName": "pasta w  garlic and veggies",
-                        "recipeID": 46991
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["result[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
-
     def get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
 
         query = """
@@ -259,48 +203,9 @@ class PyNeoGraph:
 
         return results
 
-    def test_get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
-
-        query = """
-        //Q2_Content based filtering
-        MATCH//Find recipes similar to recpies rated by user (ID) #2203 and get their ingredients.
-        (u:USER{user:2203})-[:RATED]->(r:RECIPE)-[s:SIMILAR]->(r2:RECIPE)-[:CONTAINS]->(i:INGREDIENT)
-        WITH//save user_id, user rated recipes ( r ) and recipes similar to ( r ) along with a list of their aggregate ingredients
-        u,r,r2,collect(DISTINCT i.ingredient) AS ingredients, count(r2.recipe) AS recipeCount,
-        s.sim_score AS score, [7213, 3184] AS main, [1170, 382, 5006] AS side
-        WHERE 1=1 //filter only for recipes containing ALL main & ANY of the side ingredients
-        and all(x IN main WHERE (x IN ingredients)) //all main
-        and any(x IN side WHERE (x IN ingredients)) //any side
-        WITH //return user_id, user_name, recipe rated by user, recommended recipe, similarity score and ingredient list in recommended recipe and calc number of matching ingredients in each recpie (no_sideIngr)
-        u.user as user_id, r2.name as RecipeName, r.recipe as ID1, r2.recipe AS ID, r.name AS Name,ingredients, size([x IN side WHERE x IN ingredients]) as No_SideIngr, score
-        ORDER BY No_SideIngr DESC, score DESC
-        WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-        RETURN result[0..10]
-                """
-
-        results = [
-            {
-                "result[0..9]": [  # TODO: change to 0..10 in UI
-                    {
-                        "recipeName": "zucchini packets for the grill",
-                        "recipeID": 41087
-                    },
-                    {
-                        "recipeName": "nancy duke s ratatouille",
-                        "recipeID": 93260
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["result[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
-
     def get_collaborative_recipes(self, user_id, main_ingredients, side_ingredients):
-        # TODO: implement the query Q3
+        """
+        """
 
         query = """
             //Q3_Collaborative filter
@@ -335,62 +240,6 @@ class PyNeoGraph:
         results = {'data': results}
         return results
 
-    def test_get_collaborative_recipes(self, user_id, main_ingredients, side_ingredients):
-        # TODO: implement the query Q3
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
-
-        results = [
-            {
-                "result[0..9]": [
-                    {
-                        "recipeName": "fresh tomato and roasted garlic salad dressing",
-                        "recipeID": 108091
-                    },
-                    {
-                        "recipeName": "zucchini marinara   diabetic",
-                        "recipeID": 86077
-                    },
-                    {
-                        "recipeName": "so easy pasta with fresh herbs and cold tomato",
-                        "recipeID": 139450
-                    },
-                    {
-                        "recipeName": "savory garbanzo beans over couscous",
-                        "recipeID": 50730
-                    },
-                    {
-                        "recipeName": "roasted tomato salad",
-                        "recipeID": 63172
-                    },
-                    {
-                        "recipeName": "azteca soup adopted",
-                        "recipeID": 3614
-                    },
-                    {
-                        "recipeName": "tofu parmesan",
-                        "recipeID": 23997
-                    },
-                    {
-                        "recipeName": "quick   easy chicken in wine sauce",
-                        "recipeID": 89598
-                    },
-                    {
-                        "recipeName": "grecian lamb with vegetables",
-                        "recipeID": 89997
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["result[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
-
     def get_additional_ingredients(self, main_ingredients, side_ingredients):
         """
             Probable Ingredients
@@ -421,62 +270,6 @@ class PyNeoGraph:
         results = {'data': results}
         return results
 
-    def test_get_additional_ingredients(self, main_ingredients, side_ingredients):
-        # TODO: implement the query Q4
-        results = side_ingredients
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-
-        results = [
-            {
-                "res[0..9]": [
-                    {
-                        "ingredientID": 5010,
-                        "ingredientName": "onion"
-                    },
-                    {
-                        "ingredientID": 5006,
-                        "ingredientName": "olive oil"
-                    },
-                    {
-                        "ingredientID": 6270,
-                        "ingredientName": "salt"
-                    },
-                    {
-                        "ingredientID": 5319,
-                        "ingredientName": "pepper"
-                    },
-                    {
-                        "ingredientID": 7655,
-                        "ingredientName": "water"
-                    },
-                    {
-                        "ingredientID": 6276,
-                        "ingredientName": "salt and pepper"
-                    },
-                    {
-                        "ingredientID": 5180,
-                        "ingredientName": "parmesan cheese"
-                    },
-                    {
-                        "ingredientID": 6335,
-                        "ingredientName": "scallion"
-                    },
-                    {
-                        "ingredientID": 840,
-                        "ingredientName": "butter"
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["res[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
-
     def get_relevant_ingredients(self, recipe_id):
         """
         """
@@ -494,49 +287,6 @@ class PyNeoGraph:
         results = res[0]
         results = json.dumps(results)
         results = {'data': results}
-        return results
-
-    def get_relevant_ingredients(self, recipe_id):
-        # TODO: implement the query Q5
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
-
-        results = [
-            {
-                "ingredientName": "basil",
-                "ingredientID": 382
-            },
-            {
-                "ingredientName": "parmesan cheese",
-                "ingredientID": 5180
-            },
-            {
-                "ingredientName": "red wine vinegar",
-                "ingredientID": 6009
-            },
-            {
-                "ingredientName": "olive oil",
-                "ingredientID": 5006
-            },
-            {
-                "ingredientName": "garlic",
-                "ingredientID": 3184
-            },
-            {
-                "ingredientName": "frozen pea",
-                "ingredientID": 3046
-            },
-            {
-                "ingredientName": "tomato",
-                "ingredientID": 7213
-            }
-        ]
-
-        results = json.dumps(results)
-        results = {'data': results}
-
         return results
 
     def get_alternative_ingredients(self, recipe_id):
@@ -587,62 +337,6 @@ class PyNeoGraph:
         results = {'data': results}
         return results
 
-    def get_relevant_ratings(self, user_id, recipe_id):
-        # TODO: implement the query Q7
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
-
-        results = [
-            {
-                "result[0..9]": [
-                    {
-                        "rating": "5.0",
-                        "userID": 4407
-                    },
-                    {
-                        "rating": "5.0",
-                        "userID": 4760
-                    },
-                    {
-                        "rating": "5.0",
-                        "userID": 10
-                    },
-                    {
-                        "rating": "0.0",
-                        "userID": 317
-                    },
-                    {
-                        "rating": "5.0",
-                        "userID": 325
-                    },
-                    {
-                        "rating": "5.0",
-                        "userID": 358
-                    },
-                    {
-                        "rating": "4.0",
-                        "userID": 395
-                    },
-                    {
-                        "rating": "4.0",
-                        "userID": 8321
-                    },
-                    {
-                        "rating": "5.0",
-                        "userID": 5132
-                    }
-                ]
-            }
-        ]
-
-        results = results[0]["result[0..9]"]
-        results = json.dumps(results)
-        results = {'data': results}
-
-        return results
-
     def get_recipe_details(self, recipe_id):
         # TODO: implement the query Q6
         query = """
@@ -659,23 +353,4 @@ class PyNeoGraph:
                 """
 
         results = json.dumps(self.driver.run(query).data())
-        return results
-
-    def test_get_recipe_details(self, recipe_id):
-
-        results = [
-            {
-                "steps": "['heat oven to 350 degrees', 'brush the garlic cloves with 1 teaspoon of the oil , reserving the remaining oil', 'roast the oiled garlic cloves in a pan until golden and soft , about 10 to 15 minutes', 'watch carefully so garlic does not get over-brown or burn', 'carefully remove pan from oven and cool', 'when cool enough to handle , squeeze out the garlic pulp', 'combine the pulp with the reserved olive oil and rest of the ingredients in a blender', 'blend until smooth and use the dressing on any mixed garden salad', 'refrigerate leftover']",
-                "calorieLevel": "2",
-                "numberOfIngredients": 7,
-                "nutritionDetials": "{'calories': 587.2, 'total fat': 84.0, 'sugar': 35.0, 'sodium': 1.0, 'protein': 9.0, 'saturated fat': 38.0, 'carbohydrates': 7.0}",
-                "tags": "['30-minutes-or-less', 'time-to-make', 'course', 'main-ingredient', 'cuisine', 'preparation', 'occasion', 'north-american', 'low-protein', 'healthy', 'salads', 'fruit', 'vegetables', 'canadian', 'oven', 'refrigerator', 'dinner-party', 'holiday-event', 'picnic', 'salad-dressings', 'food-processor-blender', 'dietary', 'low-sodium', 'low-cholesterol', 'low-carb', 'healthy-2', 'ontario', 'low-in-something', 'citrus', 'lemon', 'onions', 'tomatoes', 'to-go', 'equipment', 'small-appliance', 'presentation', 'served-cold']",
-                "avgRating": 4.46,
-                "numberOfRatings": 13
-            }
-        ]
-
-        results = json.dumps(results)
-        results = {'data': results}
-
         return results

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from models import PyNeoGraph, get_csv_dict
+from .models import PyNeoGraph, get_csv_dict
 from flask_login import login_required
 
 visualSearch = Blueprint('visualSearch', __name__)
