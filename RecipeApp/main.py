@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from .models import get_csv_dict, PyNeoGraph
+from models import get_csv_dict, PyNeoGraph
 import pdb
 
 main = Blueprint('main', __name__)
@@ -50,11 +50,11 @@ def recipe_details(user_id, recipe):
     recipe_decode = recipe.replace('%20', ' ')
 
     if not driver_neo4j:
-        driver_neo4j = PyNeoGraph(debug=True)
+        driver_neo4j = PyNeoGraph(debug=False)
 
-    result_1 = driver_neo4j.get_recipe_details(recipe_id)
-    result_2 = driver_neo4j.get_relevant_ingredients(recipe_id)
-    result_3 = driver_neo4j.get_alternative_ingredients(recipe_id)
+    result_1 = driver_neo4j.get_recipe_details(int(recipe_id))
+    result_2 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
+    result_3 = driver_neo4j.get_alternative_ingredients(int(recipe_id))
     result = {'data': result_1['data'] + ";" + result_2['data'] + ";" + result_3['data']}
     # result = driver_neo4j.get_recipe_details(recipe_id)
 

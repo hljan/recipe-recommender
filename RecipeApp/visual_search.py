@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request
-from .models import PyNeoGraph, get_csv_dict
-from flask_login import login_required
+from models import PyNeoGraph
 
 visualSearch = Blueprint('visualSearch', __name__)
 main_ingredients = list()
@@ -30,7 +29,6 @@ def matching_recipes(user_id):
         side_ingredients = list(set(side_ingredients.split(",")))
 
     if not driver_neo4j:
-        # driver_neo4j = PyNeoGraph(debug=True)
         driver_neo4j = PyNeoGraph()
 
     if tab_type == 'add_ingredient':
@@ -41,13 +39,13 @@ def matching_recipes(user_id):
 
     if tab_type == 'recipe':
         result = driver_neo4j.get_matching_recipes(main_ingredients, side_ingredients)
-        pdb.set_trace()
+        # pdb.set_trace()
     elif tab_type == 'ingredient':
         result = driver_neo4j.get_additional_ingredients(main_ingredients, side_ingredients)
     elif tab_type == 'contentBased':
-        result = driver_neo4j.get_content_based_recipes(user_id, main_ingredients, side_ingredients)
+        result = driver_neo4j.get_content_based_recipes(int(user_id), main_ingredients, side_ingredients)
     elif tab_type == 'collaborative':
-        result = driver_neo4j.get_collaborative_recipes(user_id, main_ingredients, side_ingredients)
+        result = driver_neo4j.get_collaborative_recipes(int(user_id), main_ingredients, side_ingredients)
 
     return render_template('visual_search.html', user_id=user_id, tab_type=tab_type, result=result,
                            main_ingredients=main_ingredients, side_ingredients=side_ingredients)
@@ -69,11 +67,11 @@ def recipe_info(user_id, recipe):
         tab_type = 'usedIngredients'
 
     if tab_type == 'usedIngredients':
-        result_1 = driver_neo4j.get_relevant_ingredients(recipe_id)
-        result_2 = driver_neo4j.get_alternative_ingredients(recipe_id)
+        result_1 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
+        result_2 = driver_neo4j.get_alternative_ingredients(int(recipe_id))
         result = {'data': result_1['data'] + ";" + result_2['data']}
     elif tab_type == 'userRatings':
-        result = driver_neo4j.get_relevant_ratings(user_id, recipe_id)
+        result = driver_neo4j.get_relevant_ratings(int(user_id), int(recipe_id))
 
     return render_template('visual_search_recipe.html', user_id=user_id, recipe=recipe, tab_type=tab_type,
                            result=result, main_ingredients=main_ingredients, side_ingredients=side_ingredients)
