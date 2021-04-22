@@ -1,3 +1,7 @@
 __pycache__
 .env
 *.ipynb
+workspace.code-workspace
+.pytest_cache
+.ipynb_checkpoints
+__pycache__
