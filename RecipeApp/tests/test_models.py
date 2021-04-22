@@ -12,6 +12,7 @@ import json
 # end = time.time()
 # print(end - start)
 
+
 class RecipeQuery:
     def __init__(self, neo4j_driver):
 
@@ -22,7 +23,7 @@ class RecipeQuery:
     def get_query_paths(self, query_path):
         queries = (glob((query_path / '*/*.cypher').as_posix()))
         return queries
-    
+
     def get_query_results(self, query_path):
         results = (glob((query_path / '*/*.json').as_posix()))
         return results
@@ -33,6 +34,7 @@ class RecipeQuery:
             out_file = f.read()
 
         return out_file
+
 
 def test_neo4j_conn(neo4j_driver):
 
@@ -55,8 +57,6 @@ def test_get_neo4j_id(neo4j_driver):
     results = neo4j_driver.get_neo4j_id(in_list=side_ingredients)
     assert results == [28, 173, 4341]
 
-
-@pytest.mark.skip()
 def test_run_q1(neo4j_driver):
     recipe_q = RecipeQuery(neo4j_driver)
     query = recipe_q.get_query(recipe_q.query_paths[0])
@@ -64,22 +64,25 @@ def test_run_q1(neo4j_driver):
     results = neo4j_driver.driver.run(query)
     assert len(results[0]['result[0..10]']) == 10
 
+
 def test_get_matching_recipes(neo4j_driver):
 
     # recipe_q = RecipeQuery(neo4j_driver)
     # query_result = recipe_q.get_file(recipe_q.query_results[0])
     # query_result = json.loads(query_result)
+    # issues reading json files?
+
     main_ingredients = ['7213&tomato', '3184&garlic']
-    side_ingredients = ['1170&olive oil', '382&cheese', '5006&basil'] #raw_ids
+    side_ingredients = ['1170&olive oil',
+                        '382&cheese', '5006&basil']  # raw_ids
 
-    query_result = neo4j_driver.test_get_matching_recipes(main_ingredients, side_ingredients)
-
-
+    query_result = neo4j_driver.test_get_matching_recipes(
+        main_ingredients, side_ingredients)
 
     result = neo4j_driver.get_matching_recipes(
         main_ingredients, side_ingredients)
-    pdb.set_trace()
     assert query_result == result
+
 
 def test_q2(neo4j_driver):
     recipe_q = RecipeQuery(neo4j_driver)
@@ -90,20 +93,74 @@ def test_q2(neo4j_driver):
     # assert len(result) == 10
     assert len(result) == 2
 
+
 def test_get_content_based_recipes(neo4j_driver):
     user = 2203
-    main_ingredients =  ['7213&tomato', '3184&garlic']
+    main_ingredients = ['7213&tomato', '3184&garlic']
     side_ingredients = ['1170&olive oil', '382&cheese', '5006&basil']
 
-    result = neo4j_driver.get_content_based_recipes(user, main_ingredients, side_ingredients)
+    query_result = neo4j_driver.get_content_based_recipes(
+        user, main_ingredients, side_ingredients)
+
+    result = neo4j_driver.get_content_based_recipes(
+        user, main_ingredients, side_ingredients)
+
+    assert len(result['data']) > 0 
+    # assert result == query_result
+
 
 def test_q3(neo4j_driver):
     recipe_q = RecipeQuery(neo4j_driver)
     query = recipe_q.get_file(recipe_q.query_paths[2])
     res = neo4j_driver.driver.run(query)
     data = res.data()
-  
+
     result = data[0]['result[0..10]']
     # assert len(result) == 10
     assert len(result) == 2
 
+def test_get_collaborative_recipes(neo4j_driver):
+
+
+def test_q4(neo4j_driver):
+    recipe_q = RecipeQuery(neo4j_driver)
+    query = recipe_q.get_file(recipe_q.query_paths[3])
+    res = neo4j_driver.driver.run(query)
+    data = res.data()
+
+    result = data[0]['result[0..10]']
+    # assert len(result) == 10
+    # assert len(result) == 2
+
+
+def test_q5(neo4j_driver):
+    recipe_q = RecipeQuery(neo4j_driver)
+    query = recipe_q.get_file(recipe_q.query_paths[4])
+    res = neo4j_driver.driver.run(query)
+    data = res.data()
+
+    result = data[0]['result[0..10]']
+    # assert len(result) == 10
+    # assert len(result) == 2
+
+
+def test_q6(neo4j_driver):
+    recipe_q = RecipeQuery(neo4j_driver)
+    query = recipe_q.get_file(recipe_q.query_paths[5])
+    res = neo4j_driver.driver.run(query)
+    data = res.data()
+
+    result = data[0]['result[0..10]']
+    # assert len(result) == 10
+    # assert len(result) == 2
+
+
+def test_q7(neo4j_driver):
+    recipe_q = RecipeQuery(neo4j_driver)
+    query = recipe_q.get_file(recipe_q.query_paths[6])
+    res = neo4j_driver.driver.run(query)
+    data = res.data()
+
+    result = data[0]['result[0..10]']
+    # assert len(result) == 10
+    # assert len(result) == 2
