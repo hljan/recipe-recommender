@@ -372,7 +372,7 @@ class PyNeoGraph:
         query = """//07_Recipe ratings
                 MATCH (r:RECIPE)<-[o:RATED]-(u:USER)
                 WITH r, u.user as user, o.rating AS rating
-                WHERE r.recipe=$recipe+id
+                WHERE r.recipe=$recipe_id
                 WITH collect({ userID:user, rating:rating }) AS result
                 RETURN result[0..10]
                 """
@@ -401,7 +401,7 @@ class PyNeoGraph:
         query = """
                 //Q6_Recipe_details
                 MATCH (u:USER)-[o:RATED]->(r:RECIPE)
-                WHERE r.recipe = 108091
+                WHERE r.recipe = $recipe_id
                 RETURN DISTINCT r.steps as steps, 
                 r.calorie_level as calorieLevel, 
                 r.n_ingredients as numberOfIngredients, 
@@ -411,5 +411,7 @@ class PyNeoGraph:
                 count(o.rating) as numberOfRatings
                 """
 
+        params = {'recipe_id': recipe_id}
+        data = self.driver.run(query, params).data()
         results = json.dumps(self.driver.run(query).data())
         return results
