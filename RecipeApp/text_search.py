@@ -43,6 +43,15 @@ def text_search(user_id):
     for data in result_3:
         collab_filter = json.loads(result_3[data])
 
-    return render_template('text_search.html',user_id=user_id, matching_recipes=matching_recipes,
-                           main_ingredients=main_ingredients, side_ingredients=side_ingredients,
+    ingredient_names = {'main': [], 'side': []}
+    for i in main_ingredients:
+        ing_id, name = i.split("&")
+        ingredient_names['main'].append(name)
+
+    for i in side_ingredients:
+        ing_id, name = i.split("&")
+        ingredient_names['side'].append(name)
+
+    return render_template('text_search.html', user_id=user_id, matching_recipes=matching_recipes,
+                           main_ingredients=ingredient_names['main'], side_ingredients=ingredient_names['side'],
                            collab_filter=collab_filter, content_based=content_based)
