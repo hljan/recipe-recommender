@@ -8,4 +8,4 @@ WHERE NOT i.ingredient IN ingredients
 WITH count(relation) AS ingrCount, i
 ORDER BY ingrCount DESC
 WITH collect({ingredientName:i.name, ingredientID:i.ingredient}) AS res	// count how many times an ingredient appears in recipes
-RETURN res[0..9] // return all ingredients besides salt and tumeric, this needs to be fixed with another WHERE clause
+RETURN res[0..10] // return all ingredients besides salt and tumeric, this needs to be fixed with another WHERE clause

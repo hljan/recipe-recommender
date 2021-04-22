@@ -10,4 +10,4 @@ WHERE 1=1
 WITH r.recipe AS ID, r.name AS RecipeName, size([x IN side WHERE x IN ingredients]) as No_SideIngr 
 ORDER BY No_SideIngr DESC LIMIT 10
 WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-RETURN result[0..9]
+RETURN result[0..10]

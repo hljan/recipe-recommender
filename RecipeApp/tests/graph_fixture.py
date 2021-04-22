@@ -1,3 +1,33 @@
+"""
+"""
+
+from pathlib import Path
+from glob import glob
+
+
+class RecipeQuery:
+    def __init__(self, neo4j_driver):
+
+        self.graph = neo4j_driver
+        self.query_paths = self.get_query_paths(Path("data\\01_Queries"))
+        self.query_results = self.get_query_results(Path("data\\01_Queries"))
+
+    def get_query_paths(self, query_path):
+        queries = (glob((query_path / '*/*.cypher').as_posix()))
+        return queries
+
+    def get_query_results(self, query_path):
+        results = (glob((query_path / '*/*.json').as_posix()))
+        return results
+
+    def get_file(self, file_path):
+
+        with open(file_path, mode='r', newline='\n') as f:
+            out_file = f.read()
+
+        return out_file
+
+
 class PyNeoGraphUI:
 
     def get_matching_recipes(self, main_ingredients, side_ingredients):

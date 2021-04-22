@@ -129,15 +129,15 @@ class PyNeoGraph:
 
             params = {"main_ingredients": main_ingredients}
 
-            return query, params
-            # res = self.driver.run(query, params)
+         
+            res = self.driver.run(query, params)
 
-            # results = res.data()
-            # # results = results[0]["result[0..10]"]
-            # # results = json.dumps(results)
-            # # results = {'data': results}
+            results = res.data()
+            results = results[0]["result[0..10]"]
+            results = json.dumps(results)
+            results = {'data': results}
 
-            # return results
+            return results
 
         query = """
         MATCH 
@@ -168,7 +168,10 @@ class PyNeoGraph:
         return results
 
     def get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
+        """
 
+        """
+        
         query = """
         //Q2_Content based filtering
         MATCH//Find recipes similar to recpies rated by user (ID) #2203 and get their ingredients.
