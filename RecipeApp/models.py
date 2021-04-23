@@ -31,21 +31,6 @@ def get_users(path='data/user_list.csv'):
     return users
 
 
-def get_recipes(path_2='data/test_query_output/q2_content_based_filter.json',
-                path_3='data/test_query_output/q3_collab_filter.json'):
-    q2_content_based = open(path_2, encoding='utf-8-sig')
-    q3_match_recipes = open(path_3, encoding='utf-8-sig')
-
-    results_array_2 = json.load(q2_content_based)
-    results_array_3 = json.load(q3_match_recipes)
-
-    content_based = results_array_2
-
-    collab_filter = results_array_3
-
-    return content_based, collab_filter
-
-
 class PyNeoGraph:
 
     def __init__(self, debug=False):
