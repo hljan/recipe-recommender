@@ -61,7 +61,7 @@
         <div style="display: block" class="menu" id="matching_recipe">
         {% for recipe in matching_recipes %}
             {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
-            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+            <a href="{{ url_for('main.text-search-recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
                 <div class="menu-item">
                     <div class="menu-item-name">{{ recipe.recipeName }}</div>
                 </div>
@@ -72,7 +72,7 @@
     <div class="menu" id="content_based">
         {% for recipe in content_based %}
             {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
-            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+            <a href="{{ url_for('main.text-search-recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
                 <div class="menu-item">
                     <div class="menu-item-name">{{ recipe.recipeName }}</div>
                 </div>
@@ -83,7 +83,7 @@
     <div class="menu" id="collab_filter">
         {% for recipe in collab_filter %}
             {% set recipe2=recipe.recipeID|string + "&" + recipe.recipeName %}
-            <a href="{{ url_for('main.recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
+            <a href="{{ url_for('main.text_search_recipe_details', recipe=recipe2, recipe_id=recipe.recipeID, user_id=user_id) }}">
                 <div class="menu-item">
                     <div class="menu-item-name">{{ recipe.recipeName }}</div>
                 </div>

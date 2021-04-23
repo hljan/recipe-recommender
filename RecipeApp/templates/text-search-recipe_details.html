@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %} Recipe Details {% endblock %}
+
+{% block jQueryPlugin %}
+<script type="text/javascript" src="/static/js/d3.v5.min.js"></script>
+<script type="text/javascript" src="/static/js/d3-tip.min.js"></script>
+<script type="text/javascript" src="/static/js/d3-recipe-graphs.js"></script>
+{% endblock %}
+
+{% block navbarContent %}
+<ul class="menu-area-main">
+    <li>
+        <a>User ID: {{ user_id }}</a>
+    <li>
+    <li class="active">
+        <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
+    </li>
+    <li class="active">
+        <a href="{{ url_for('textSearch.text_search', user_id=user_id, recipe=recipe, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}">Back</a>
+    </li>
+    <li>
+        <a href="{{ url_for('auth.logout') }}">
+            <img class="logout_btn" src="/static/icon/logout.png" alt="logout"/>
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block bodyContent %}
+<br><br><br>
+<div id="recipeDetails" style="padding-left: 10%; padding-right: 10%">
+    <table id="recipeTable">
+        <tr>
+            <th colspan="2" id="th_recipe_name" style="text-align: center"></th>
+        </tr>
+        <tr>
+            <th>Steps:</th>
+            <td id="td_steps"></td>
+        </tr>
+        <tr>
+            <th>Number of Ingredients:</th>
+            <td id="td_numberOfIngredients"></td>
+        </tr>
+        <tr>
+            <th>Ingredient <br>(Alternative Ingredients):</th>
+            <td id="td_ingredients"></td>
+        </tr>
+        <tr>
+            <th>Nutrition Details:</th>
+            <td id="td_nutritionDetials"></td>
+        </tr>
+        <tr>
+            <th>Tags:</th>
+            <td id="td_tags"></td>
+        </tr>
+        <tr>
+            <th>Average Rating:</th>
+            <td id="td_avgRating">None</td>
+        </tr>
+        <tr>
+            <th>Number of Ratings:</th>
+            <td id="td_numberOfRatings">None</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var groupData = {{ result.data | tojson }}.split(";"),
+        recipeData = eval(groupData[0]),
+        ingredients = eval(groupData[1]),
+        recipeRatings = eval(groupData[2]),
+        recipe_info = {{ recipe | tojson }}.split('&'),
+        recipe_name = decodeURI(recipe_info[1]),
+        th_ing = document.getElementById("td_ingredients");
+
+    document.getElementById("th_recipe_name").innerHTML = "Recipe: " + recipe_name;
+
+
+    for (i = 0; i < ingredients.length; i++) {
+        th_ing.innerHTML += "- " + ingredients[i].ingredientName + " ( " + ingredients[i].alternateIngredient + " )<br> ";
+    }
+
+    for (const key in recipeData[0]) {
+        var td_id = "td_" + `${key}`,
+            td_ele = document.getElementById(td_id),
+            ele_arr;
+
+        if (`${key}` === "steps") {
+            ele_arr = eval(`${recipeData[0][key]}`);
+            for (i = 0; i < ele_arr.length; i++) {
+                td_ele.innerHTML += (i + 1) + ". " + ele_arr[i] + "<br />";
+            }
+        } else if (`${key}` === "tags") {
+            ele_arr = eval(`${recipeData[0][key]}`);
+            for (i = 0; i < ele_arr.length; i++) {
+                td_ele.innerHTML += "<button class='detailsItem'>" + ele_arr[i] + "</button> ";
+            }
+        } else if (`${key}` === "nutritionDetials") {
+            ele_arr = `${recipeData[0][key]}`;
+            ele_arr = JSON.parse(ele_arr.replaceAll("\'", "\""));
+            for (const nutr in ele_arr) {
+                td_ele.innerHTML += "<button class='detailsItem'>" + `${nutr}` + ": " + `${ele_arr[nutr]}` + "</button> ";
+            }
+        } else {
+            td_ele.innerHTML = `${recipeData[0][key]}`;
+        }
+    }
+
+    for (const key_r in recipeRatings[0]) {
+        var td_id_val = `${recipeRatings[0][key_r]}`;
+        if (td_id_val !== "null" && td_id_val !== "0") {
+            var td_id_rating = "td_" + `${key_r}`,
+                td_ele_rating = document.getElementById(td_id_rating);
+            td_ele_rating.innerHTML = td_id_val;
+        }
+    }
+</script>
+{% endblock %}

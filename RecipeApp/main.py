@@ -60,3 +60,21 @@ def recipe_details(user_id, recipe):
 
     return render_template('recipe_details.html', user_id=user_id, recipe=recipe_decode, result=result,
                            main_ingredients=main_ingredients, side_ingredients=side_ingredients)
+
+@main.route('/main/<user_id>/recipe_details/<recipe>', methods=['GET', 'POST'])
+def text_search_recipe_details(user_id, recipe):
+    global driver_neo4j, main_ingredients, side_ingredients
+
+    recipe_id, recipe_name = recipe.split("&")
+    recipe_decode = recipe.replace('%20', ' ')
+
+    if not driver_neo4j:
+        driver_neo4j = PyNeoGraph(debug=False)
+
+    result_1 = driver_neo4j.get_recipe_details(int(recipe_id))
+    result_2 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
+    result_3 = driver_neo4j.get_recipe_details_ratings(int(recipe_id))
+    result = {'data': result_1['data'] + ";" + result_2['data'] + ";" + result_3['data']}
+
+    return render_template('recipe_details.html', user_id=user_id, recipe=recipe_decode, result=result,
+                           main_ingredients=main_ingredients, side_ingredients=side_ingredients)
