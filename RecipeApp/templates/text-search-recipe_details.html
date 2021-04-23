@@ -17,7 +17,7 @@
         <a href="{{ url_for('main.initial_search', user_id=user_id, db_connected=db_connected) }}">Home</a>
     </li>
     <li class="active">
-        <a href="{{ url_for('textSearch.text_search', user_id=user_id, recipe=recipe, main_ingredients=main_ingredients, side_ingredients=side_ingredients) }}">Back</a>
+        <a onclick="goBack()">Back</a>
     </li>
     <li>
         <a href="{{ url_for('auth.logout') }}">
@@ -115,5 +115,9 @@
             td_ele_rating.innerHTML = td_id_val;
         }
     }
+
+    function goBack() {
+  window.history.back();
+}
 </script>
 {% endblock %}
