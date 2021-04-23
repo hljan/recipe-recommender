@@ -25,10 +25,8 @@ def text_search(user_id):
         main_ingredients = list(set((main_ingredients.split(","))))
         side_ingredients = list(set(side_ingredients.split(",")))
 
-    debug = True # set this to use fixture over graph db conn
     if not driver_neo4j:
-        driver_neo4j = PyNeoGraph(debug=True)
-        pdb.set_trace()
+        driver_neo4j = PyNeoGraph()
 
     result_1 = driver_neo4j.get_matching_recipes(main_ingredients, side_ingredients)
     matching_recipes = []
