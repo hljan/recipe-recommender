@@ -276,23 +276,22 @@ class PyNeoGraph:
                 ingredients
         """
         ingredients = main_ingredients + side_ingredients
-        # ingredients = main_ingredients.extend(side_ingredients)
         ingredients = [int(i.split('&')[0]) for i in ingredients]
-        # ingredients = self.get_neo4j_id(in_list=ingredients)
 
         query = """
                 //Q4_Probable_ingredient
                 WITH $ingredients AS ingredients	// Ingredient input list
-                MATCH (r:RECIPE)		// only match recipes (r) that have relationships to ingredients input
+                MATCH p=(r:RECIPE)-[:CONTAINS]->(other:INGREDIENT)
+                USING SCAN r:RECIPE
                 WHERE all(i in ingredients 
-                WHERE EXISTS((r)-[:CONTAINS]->(:INGREDIENT {ingredient:i})))	// MATCH all relationships from the matched recipe node
-                MATCH p=(r)-[relation:CONTAINS]->(i)	// aggregate by counting the relationships to paired ingredients from input
-                WHERE NOT i.ingredient IN ingredients
-                WITH count(relation) AS ingrCount, i
+                    WHERE exists((r)-[:CONTAINS]-(:INGREDIENT{ingredient:i})))
+                AND NOT other.ingredient IN ingredients
+                WITH count(p) AS ingrCount, other
                 ORDER BY ingrCount DESC
-                WITH collect({ingredientName:i.name, ingredientID:i.ingredient}) AS result	// count how many times an ingredient appears in recipes
-                RETURN result[0..10] // return all ingredients besides salt and tumeric, this needs to be fixed with another WHERE clause
+                WITH collect({ingredientName:other.name, ingredientID:other.ingredient}) AS result
+                RETURN result[0..10]
                 """
+
 
         params = {"ingredients": ingredients}
         res = self.driver.run(query, params).data()
