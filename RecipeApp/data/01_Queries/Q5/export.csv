@@ -1,8 +1,8 @@
-﻿ingredientName,ingredientID
-basil,382
-parmesan cheese,5180
-red wine vinegar,6009
-olive oil,5006
-garlic,3184
-frozen pea,3046
-tomato,7213
+﻿ingredientName,ingredientID,alternateIngredient
+basil,382,"[lemon basil,basil pesto,fresh basil]"
+parmesan cheese,5180,"[grated parmesan cheese,shredded parmesan cheese,fresh parmesan cheese]"
+red wine vinegar,6009,"[white wine vinegar,wine vinegar,garlic red wine vinegar]"
+olive oil,5006,"[garlic oil,oil,rosemary oil]"
+garlic,3184,"[tomato basil garlic seasoning,garlic sauce,garlic hummu]"
+frozen pea,3046,"[frozen tiny pea,frozen green pea,frozen sweet pea]"
+tomato,7213,"[tomato sauce,tomato soup,tomato ketchup]"

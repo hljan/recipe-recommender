@@ -48,30 +48,16 @@
     openTab(selectedTab);
 
     // handle query data
-    var graphData;
-    if (selectedTab === "usedIngredients") {
-        graphData = {{ result.data | tojson }}.split(";");
-    } else if (selectedTab === "userRatings") {
-        graphData = {{ result.data | safe }};
-    }
-
-    var nodes = {},
+    var graphData = {{ result.data | safe }},
+        nodes = {},
         links = [],
         recipe_info = {{ recipe | tojson }}.split('&'),
         recipe_name = decodeURI(recipe_info[1]);
         nodes[0] = { name: recipe_name, id: 0 };
 
     if (selectedTab === "usedIngredients") {
-        var data_main_ing = eval(graphData[0]),
-            data_alt_ing = eval(graphData[1]),
-            alt_ing_val = "";
-
-        data_alt_ing.forEach(function (alt) {
-            alt_ing_val += alt.ingredientName + "; ";
-        });
-
-        data_main_ing.forEach(function (data) {
-            nodes[data.ingredientID] = {name: data.ingredientName, id: data.ingredientID, alt: alt_ing_val};
+        graphData.forEach(function (data) {
+            nodes[data.ingredientID] = {name: data.ingredientName, id: data.ingredientID, alt: data.alternateIngredient};
             links.push({source: nodes[0], target: nodes[data.ingredientID]});
         });
 

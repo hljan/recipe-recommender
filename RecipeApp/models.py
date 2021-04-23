@@ -105,38 +105,40 @@ class PyNeoGraph:
                 results(list[dict]): list of matching recipes that contain main and side
                     ingredients
         """
+        if side_ingredients[0] == '':
+            side_ingredients = main_ingredients
+        main = [int(i.split('&')[0]) for i in main_ingredients]
+        side = [int(i.split('&')[0]) for i in side_ingredients]
 
-        main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
-
-        try:
-            side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
-        except ValueError as e:  # no side_ingredients
-
-            query = """           
-            //Q1_Matching Recipes
-            MATCH 
-                (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
-            WITH
-                r, collect(DISTINCT i.ingredient) AS ingredients,
-                $main_ingredients AS main,
-            WHERE 1=1
-                and all(x IN main WHERE (x IN ingredients))
-            WITH r.name as RecipeName, r.recipe as ID
-            ORDER BY size([x IN side WHERE x IN ingredients]) DESC, r.n_ingredients
-            WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-            RETURN result[0..10]
-            """
-
-            params = {"main_ingredients": main_ingredients}
-
-            res = self.driver.run(query, params)
-
-            results = res.data()
-            results = results[0]["result[0..10]"]
-            results = json.dumps(results)
-            results = {'data': results}
-
-            return results
+        # try:
+        #     side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+        # except ValueError as e:  # no side_ingredients
+        #
+        #     query = """
+        #     //Q1_Matching Recipes
+        #     MATCH
+        #         (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+        #     WITH
+        #         r, collect(DISTINCT i.ingredient) AS ingredients,
+        #         $main_ingredients AS main
+        #     WHERE 1=1
+        #         and all(x IN main WHERE (x IN ingredients))
+        #     WITH r.name as RecipeName, r.recipe as ID
+        #     ORDER BY size([x IN side WHERE x IN ingredients]) DESC, r.n_ingredients
+        #     WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
+        #     RETURN result[0..10]
+        #     """
+        #
+        #     params = {"main_ingredients": main_ingredients}
+        #
+        #     res = self.driver.run(query, params)
+        #
+        #     results = res.data()
+        #     results = results[0]["result[0..10]"]
+        #     results = json.dumps(results)
+        #     results = {'data': results}
+        #
+        #     return results
 
         query = """
         //Q1_Matching Recipes
@@ -154,8 +156,8 @@ class PyNeoGraph:
         RETURN result[0..10]
         """
 
-        params = {"main_ingredients": main_ingredients,
-                  "side_ingredients": side_ingredients}
+        params = {"main_ingredients": main,
+                  "side_ingredients": side}
 
         res = self.driver.run(query, params)
 
@@ -198,11 +200,13 @@ class PyNeoGraph:
         RETURN result[0..10]
         """
 
-        main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
-        side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+        if side_ingredients[0] == '':
+            side_ingredients = main_ingredients
+        main = [int(i.split('&')[0]) for i in main_ingredients]
+        side = [int(i.split('&')[0]) for i in side_ingredients]
 
-        params = {"main_ingredients": main_ingredients,
-                  "side_ingredients": side_ingredients,
+        params = {"main_ingredients": main,
+                  "side_ingredients": side,
                   "user": user_id}
         res = self.driver.run(query, params).data()
 
@@ -243,11 +247,13 @@ class PyNeoGraph:
             RETURN result[0..10]
                 """
 
-        main_ingredients = [int(i.split('&')[0]) for i in main_ingredients]
-        side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
+        if side_ingredients[0] == '':
+            side_ingredients = main_ingredients
+        main = [int(i.split('&')[0]) for i in main_ingredients]
+        side = [int(i.split('&')[0]) for i in side_ingredients]
 
-        params = {"main_ingredients": main_ingredients,
-                  "side_ingredients": side_ingredients,
+        params = {"main_ingredients": main,
+                  "side_ingredients": side,
                   "user": user_id}
         res = self.driver.run(query, params).data()
 
@@ -310,9 +316,9 @@ class PyNeoGraph:
 
         query = """
                 //Q5_Ingredients in a recipe
-                MATCH (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
+                MATCH (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE), (a:INGREDIENT)<-[s:SIMILAR]-(i:INGREDIENT)
                 WHERE r.recipe = $recipe_id
-                RETURN i.name as ingredientName, i.ingredient as ingredientID
+                RETURN i.name as ingredientName, i.ingredient as ingredientID, collect(Distinct a.name) as alternateIngredient
                 """
 
         params = {"recipe_id": recipe_id}
@@ -320,33 +326,6 @@ class PyNeoGraph:
 
         results = json.dumps(results)
         results = {'data': results}
-        return results
-
-    def get_alternative_ingredients(self, recipe_id):
-        # TODO: implement the query Q8
-        # query = """
-        #         """
-        # results = self.driver.run(query).to_data_frame()
-        # results = json.dumps(driver.run(query).data())
-
-        results = [
-            {
-                "ingredientName": "basil",
-                "ingredientID": 382,
-            },
-            {
-                "ingredientName": "parmesan cheese",
-                "ingredientID": 5180
-            },
-            {
-                "ingredientName": "red wine vinegar",
-                "ingredientID": 6009
-            }
-        ]
-
-        results = json.dumps(results)
-        results = {'data': results}
-
         return results
 
     def get_relevant_ratings(self, user_id, recipe_id):
@@ -391,17 +370,38 @@ class PyNeoGraph:
                 ingredients
         """
 
-        query = """
+        query = """                  
                 //Q6_Recipe_details
-                MATCH (u:USER)-[o:RATED]->(r:RECIPE)
+                MATCH (r:RECIPE)
                 WHERE r.recipe = $recipe_id
                 RETURN DISTINCT r.steps as steps, 
-                r.calorie_level as calorieLevel, 
-                r.n_ingredients as numberOfIngredients, 
-                r.nutrition_dict as nutritionDetials, 
-                r.tags as tags, 
-                round(avg(tointeger(o.rating)),2) as avgRating, 
-                count(o.rating) as numberOfRatings
+                r.n_ingredients as numberOfIngredients, r.nutrition_dict as nutritionDetials, r.tags as tags
+                """
+
+        params = {'recipe_id': recipe_id}
+        results = self.driver.run(query, params).data()
+        results = json.dumps(results)
+        results = {'data': results}
+        return results
+
+    def get_recipe_details_ratings(self, recipe_id):
+        """
+
+        Args:
+            main_ingredints(list[str]): list of main_ingredient raw_ids and names
+                ['7213&tomato'] etc
+            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+
+        Returns:
+            results(list[dict]): list of matching recipes that contain main and side
+                ingredients
+        """
+
+        query = """                
+                //Q6.1_Recipe_details
+                MATCH (u:USER)-[o:RATED]->(r:RECIPE)
+                WHERE r.recipe = $recipe_id
+                RETURN round(avg(tointeger(o.rating)),2) as avgRating, count(o.rating) as numberOfRatings
                 """
 
         params = {'recipe_id': recipe_id}

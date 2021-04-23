@@ -65,9 +65,7 @@ def recipe_info(user_id, recipe):
         tab_type = 'usedIngredients'
 
     if tab_type == 'usedIngredients':
-        result_1 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
-        result_2 = driver_neo4j.get_alternative_ingredients(int(recipe_id))
-        result = {'data': result_1['data'] + ";" + result_2['data']}
+        result = driver_neo4j.get_relevant_ingredients(int(recipe_id))
     elif tab_type == 'userRatings':
         result = driver_neo4j.get_relevant_ratings(int(user_id), int(recipe_id))
 

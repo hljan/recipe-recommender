@@ -55,7 +55,7 @@ def recipe_details(user_id, recipe):
 
     result_1 = driver_neo4j.get_recipe_details(int(recipe_id))
     result_2 = driver_neo4j.get_relevant_ingredients(int(recipe_id))
-    result_3 = driver_neo4j.get_alternative_ingredients(int(recipe_id))
+    result_3 = driver_neo4j.get_recipe_details_ratings(int(recipe_id))
     result = {'data': result_1['data'] + ";" + result_2['data'] + ";" + result_3['data']}
 
     return render_template('recipe_details.html', user_id=user_id, recipe=recipe_decode, result=result,

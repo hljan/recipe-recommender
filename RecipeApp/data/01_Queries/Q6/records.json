@@ -1,11 +1,8 @@
 ﻿[
   {
-    "steps": "['heat oven to 350 degrees', 'brush the garlic cloves with 1 teaspoon of the oil , reserving the remaining oil', 'roast the oiled garlic cloves in a pan until golden and soft , about 10 to 15 minutes', 'watch carefully so garlic does not get over-brown or burn', 'carefully remove pan from oven and cool', 'when cool enough to handle , squeeze out the garlic pulp', 'combine the pulp with the reserved olive oil and rest of the ingredients in a blender', 'blend until smooth and use the dressing on any mixed garden salad', 'refrigerate leftover']",
-    "calorieLevel": "2",
-    "numberOfIngredients": 7,
-    "nutritionDetials": "{'calories': 587.2, 'total fat': 84.0, 'sugar': 35.0, 'sodium': 1.0, 'protein': 9.0, 'saturated fat': 38.0, 'carbohydrates': 7.0}",
-    "tags": "['30-minutes-or-less', 'time-to-make', 'course', 'main-ingredient', 'cuisine', 'preparation', 'occasion', 'north-american', 'low-protein', 'healthy', 'salads', 'fruit', 'vegetables', 'canadian', 'oven', 'refrigerator', 'dinner-party', 'holiday-event', 'picnic', 'salad-dressings', 'food-processor-blender', 'dietary', 'low-sodium', 'low-cholesterol', 'low-carb', 'healthy-2', 'ontario', 'low-in-something', 'citrus', 'lemon', 'onions', 'tomatoes', 'to-go', 'equipment', 'small-appliance', 'presentation', 'served-cold']",
-    "avgRating": 4.46,
-    "numberOfRatings": 13
+    "steps": "['boil eggs until hard boiled', 'place eggs in cold water and then shell', 'slice top and bottom from egg so it can stand up', 'shred lettuce finely and put on plate', 'peel cucumer , slice finely and place on top of lettuce', 'stand the eggs on bed of lettuce and cucumber', 'place 1 / 2 tomato on top of each egg', 'dot mayonnaise on tomato halves to look like toadstools']",
+    "numberOfIngredients": 5,
+    "nutritionDetials": "{'calories': 87.9, 'total fat': 7.0, 'sugar': 10.0, 'sodium': 3.0, 'protein': 14.0, 'saturated fat': 7.0, 'carbohydrates': 1.0}",
+    "tags": "['15-minutes-or-less', 'time-to-make', 'course', 'main-ingredient', 'cuisine', 'preparation', 'occasion', 'south-west-pacific', '5-ingredients-or-less', 'salads', 'side-dishes', 'eggs-dairy', 'australian', 'easy', 'beginner-cook', 'kid-friendly', 'eggs', 'dietary', 'toddler-friendly', 'novelty', 'presentation', 'served-cold']"
   }
 ]
