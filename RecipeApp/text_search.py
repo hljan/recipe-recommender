@@ -15,11 +15,10 @@ driver_neo4j = list()
 @textSearch.route('/text_search/<user_id>', methods=['GET', 'POST'])
 def text_search(user_id):
     global main_ingredients, side_ingredients, driver_neo4j
+    main_ingredients = list()
+    side_ingredients = list()
 
     if not main_ingredients or not side_ingredients:
-        main_ingredients = list()
-        side_ingredients = list()
-
         main_ingredients = request.args.get('main_ingredients')
         side_ingredients = request.args.get('side_ingredients')
 
