@@ -33,12 +33,12 @@ def text_search(user_id):
     for data in result_1:
         matching_recipes = json.loads(result_1[data])
 
-    result_2 = driver_neo4j.get_content_based_recipes(user_id, main_ingredients, side_ingredients)
+    result_2 = driver_neo4j.get_content_based_recipes(int(user_id), main_ingredients, side_ingredients)
     content_based = []
     for data in result_2:
         content_based = json.loads(result_2[data])
 
-    result_3 = driver_neo4j.get_collaborative_recipes(user_id, main_ingredients, side_ingredients)
+    result_3 = driver_neo4j.get_collaborative_recipes(int(user_id), main_ingredients, side_ingredients)
     collab_filter = []
     for data in result_3:
         collab_filter = json.loads(result_3[data])
