@@ -2,23 +2,19 @@
 """
     Module Level Docstring
 
-
-    TODO:
-        Q1 - matching recipes (inputs are user-id and ingredients-id)
-        Q2 - recipe-related recipes (input is recipe-id (and user-id?))
-        Q3 - recipe-related user-rating ((input is recipe-id (and user-id?))
-        Q4 - alternative/additional ingredients (inputs are user-id and ingredients-id)
-        Q5 - recipe-related ingredients (input is recipe-id (and user-id?))
-        
+    Q1 - matching recipes (inputs are ingredients-id)
+    Q2 - matching recipes - content based (inputs are ingredients-id and user-id)
+    Q3 - matching recipes - collaborative (inputs are ingredients-id and user-id)
+    Q4 - additional ingredients (inputs are ingredients-id)
+    Q5 - recipe-related and alternative ingredients (input is recipe-id)
+    Q6 - recipe details (input is recipe-id)
+    Q6.1 - recipe details for reviews (input is recipe-id)
+    Q7 - recipe ratings (input is recipe-id)
 """
 
 import json
 import pandas as pd
 from py2neo import Graph
-from tests import PyNeoGraphUI
-
-
-# import pdb
 
 
 def get_csv_dict(path='data/ingredient_autocomplete.csv'):
@@ -34,13 +30,8 @@ def get_users(path='data/user_list.csv'):
 class PyNeoGraph:
 
     def __init__(self, debug=False):
-        """
-        """
         if not debug:
             self.driver = Graph(bolt=True, host='localhost')
-        # else:
-        #     graph_fixture = PyNeoGraphUI()
-        #     return graph_fixture
 
     def test_conn(self):
         query = """
@@ -80,50 +71,19 @@ class PyNeoGraph:
 
     def get_matching_recipes(self, main_ingredients, side_ingredients):
         """
+        Args:
+            main_ingredients(list[str]): list of main_ingredient raw_ids and names
+                ['7213&tomato'] etc
+            side_ingredients(list[int]): list of side_ingredient raw_ids and names
 
-            Args:
-                main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                    ['7213&tomato'] etc
-                side_ingredient(list[int]): list of side_ingredient raw_ids and names
-
-            Returns:
-                results(list[dict]): list of matching recipes that contain main and side
-                    ingredients
+        Returns:
+            results(list[dict]): list of matching recipes
         """
+
         if side_ingredients[0] == '':
             side_ingredients = main_ingredients
         main = [int(i.split('&')[0]) for i in main_ingredients]
         side = [int(i.split('&')[0]) for i in side_ingredients]
-
-        # try:
-        #     side_ingredients = [int(i.split('&')[0]) for i in side_ingredients]
-        # except ValueError as e:  # no side_ingredients
-        #
-        #     query = """
-        #     //Q1_Matching Recipes
-        #     MATCH
-        #         (i:INGREDIENT)<-[:CONTAINS]-(r:RECIPE)
-        #     WITH
-        #         r, collect(DISTINCT i.ingredient) AS ingredients,
-        #         $main_ingredients AS main
-        #     WHERE 1=1
-        #         and all(x IN main WHERE (x IN ingredients))
-        #     WITH r.name as RecipeName, r.recipe as ID
-        #     ORDER BY size([x IN side WHERE x IN ingredients]) DESC, r.n_ingredients
-        #     WITH collect({ recipeName:RecipeName, recipeID:ID }) AS result
-        #     RETURN result[0..10]
-        #     """
-        #
-        #     params = {"main_ingredients": main_ingredients}
-        #
-        #     res = self.driver.run(query, params)
-        #
-        #     results = res.data()
-        #     results = results[0]["result[0..10]"]
-        #     results = json.dumps(results)
-        #     results = {'data': results}
-        #
-        #     return results
 
         query = """
         //Q1_Matching Recipes
@@ -156,17 +116,14 @@ class PyNeoGraph:
 
     def get_content_based_recipes(self, user_id, main_ingredients, side_ingredients):
         """
+        Args:
+            user_id(int): id of the user
+            main_ingredients(list[str]): list of main_ingredient raw_ids and names
+                ['7213&tomato'] etc
+            side_ingredients(list[int]): list of side_ingredient raw_ids and names
 
-            Args:
-                user_id(int):
-                main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                    ['7213&tomato'] etc
-                side_ingredient(list[int]): list of side_ingredient raw_ids and names
-
-            Returns:
-                results(list[dict]): list of matching recipes that contain main and side
-                    ingredients
-
+        Returns:
+            results(list[dict]): list of matching recipes with content-based filtering
         """
 
         query = """       
@@ -204,16 +161,13 @@ class PyNeoGraph:
     def get_collaborative_recipes(self, user_id, main_ingredients, side_ingredients):
         """
         Args:
-            user_id(int):
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
+            user_id(int): id of the user
+            main_ingredients(list[str]): list of main_ingredient raw_ids and names
                 ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            side_ingredients(list[int]): list of side_ingredient raw_ids and names
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
-
-
+            results(list[dict]): list of matching recipes with collaborative filtering
         """
 
         query = """           
@@ -249,18 +203,18 @@ class PyNeoGraph:
 
     def get_additional_ingredients(self, main_ingredients, side_ingredients):
         """
-        Probable Ingredients
-
         Args:
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
+            main_ingredients(list[str]): list of main_ingredient raw_ids and names
                 ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            side_ingredients(list[int]): list of side_ingredient raw_ids and names
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
+            results(list[dict]): list of related ingredients based on similarity
         """
-        ingredients = main_ingredients + side_ingredients
+        if side_ingredients[0] == '':
+            ingredients = main_ingredients
+        else:
+            ingredients = main_ingredients + side_ingredients
         ingredients = [int(i.split('&')[0]) for i in ingredients]
 
         query = """
@@ -277,7 +231,6 @@ class PyNeoGraph:
                 RETURN result[0..10]
                 """
 
-
         params = {"ingredients": ingredients}
         res = self.driver.run(query, params).data()
 
@@ -289,13 +242,10 @@ class PyNeoGraph:
     def get_relevant_ingredients(self, recipe_id):
         """
         Args:
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            recipe_id(int): id of the recipe
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
+            results(dict): dict of related ingredients
         """
 
         query = """
@@ -312,17 +262,13 @@ class PyNeoGraph:
         results = {'data': results}
         return results
 
-    def get_relevant_ratings(self, user_id, recipe_id):
+    def get_relevant_ratings(self, recipe_id):
         """
         Args:
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            recipe_id(int): id of the recipe
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
-
+            results(dict): dict of related ratings
         """
 
         query = """//07_Recipe ratings
@@ -343,15 +289,11 @@ class PyNeoGraph:
 
     def get_recipe_details(self, recipe_id):
         """
-
         Args:
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            recipe_id(int): id of the recipe
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
+            results(dict): dict of recipe details
         """
 
         query = """                  
@@ -370,15 +312,11 @@ class PyNeoGraph:
 
     def get_recipe_details_ratings(self, recipe_id):
         """
-
         Args:
-            main_ingredints(list[str]): list of main_ingredient raw_ids and names
-                ['7213&tomato'] etc
-            side_ingredient(list[int]): list of side_ingredient raw_ids and names
+            recipe_id(int): id of the recipe
 
         Returns:
-            results(list[dict]): list of matching recipes that contain main and side
-                ingredients
+            results(dict): dict of recipe details for rating information
         """
 
         query = """                
