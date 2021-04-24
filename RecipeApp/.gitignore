@@ -1,7 +1,7 @@
 __pycache__
 .env
 *.ipynb
-workspace.code-workspace
+tests/workspace.code-workspace
 .pytest_cache
 .ipynb_checkpoints
 .vscode
