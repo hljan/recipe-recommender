@@ -18,11 +18,41 @@ body {
     background-attachment: fixed;
 }
 
+.ui-autocomplete-custom {
+    background: #ffffff;
+}
+
+path.nodeLink {
+    fill: none;
+    stroke: grey;
+    stroke-width: 3px;
+}
+
 td {
     border: 2px solid #4e463a;
     text-align: left;
     padding: 10px;
     font-size: 14px;
+}
+
+a, .btn {
+    text-decoration: none !important;
+    outline: none !important;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+.detailsItem {
+    pointer-events: none;
+    margin-top: 10px;
+    background-color: #ece682;
+    border: 2px solid #dddddd;
+    border-radius: 25px;
+    padding: 6px 20px;
+    font-size: 12px;
 }
 
 th {
@@ -160,11 +190,42 @@ button {
     cursor: pointer;
 }
 
+.full {
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.d3-tooltip {
+    position: absolute;
+    line-height: 1.2;
+    border: 5px;
+    padding: 10px;
+    background: rgba(54, 54, 54, 0.8);
+    color: white;
+    border-radius: 10px;
+}
+
+
 .app_name {
     color: #cc6600;
     font-size: 30px;
     font-weight: bold;
     padding: 5px 10px;
+}
+
+.selected_ingredients {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background-color: #4CAF50;
 }
 
 .menu-area-main li.active a {
@@ -301,6 +362,13 @@ button {
     height: 30px;
 }
 
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 20px 20px;
+    height: 100%;
+}
+
 .menu-area {
     float: right;
 
@@ -380,6 +448,28 @@ button {
     color: #dea617;
     padding: 5px 0px;
     padding-bottom: 25px;
+}
+
+.submit {
+    padding: 9px 0;
+    background: #428713;
+    color: #fff;
+    margin-left: -5px;
+    font-weight: 500;
+    font-size: 18px;
+    max-width: 170px;
+    width: 100%;
+    border-radius: 30px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in;
+}
+
+.submit:hover {
+    background: #ff7e1d;
+
+    color: #fff;
+    transition: all 0.3s ease-in;
+
 }
 
 .error_msg {

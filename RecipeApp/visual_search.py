@@ -31,7 +31,10 @@ def matching_recipes(user_id):
     if tab_type == 'add_ingredient':
         add_ingredients = request.form['add_ingredients']
         add_ingredients = list(add_ingredients.split(","))[0:-1]
-        side_ingredients += add_ingredients
+        if side_ingredients[0] != '':
+            side_ingredients += add_ingredients
+        else:
+            side_ingredients = add_ingredients
         tab_type = 'ingredient'
 
     if tab_type == 'recipe':

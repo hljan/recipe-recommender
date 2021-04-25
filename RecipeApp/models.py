@@ -211,7 +211,7 @@ class PyNeoGraph:
         Returns:
             results(list[dict]): list of related ingredients based on similarity
         """
-        if side_ingredients[0] == '':
+        if side_ingredients[0] == '' and len(side_ingredients) <= 1:
             ingredients = main_ingredients
         else:
             ingredients = main_ingredients + side_ingredients
