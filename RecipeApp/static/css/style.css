@@ -18,16 +18,6 @@ body {
     background-attachment: fixed;
 }
 
-.ui-autocomplete-custom {
-    background: #ffffff;
-}
-
-path.nodeLink {
-    fill: none;
-    stroke: grey;
-    stroke-width: 3px;
-}
-
 td {
     border: 2px solid #4e463a;
     text-align: left;
@@ -138,16 +128,6 @@ a {
     outline: none !important;
 }
 
-a, .btn {
-    text-decoration: none !important;
-    outline: none !important;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -ms-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
-}
-
 img {
     max-width: 100%;
     height: auto;
@@ -157,16 +137,6 @@ img {
     outline: 0;
 }
 
-.detailsItem {
-    pointer-events: none;
-    margin-top: 10px;
-    background-color: #ece682;
-    border: 2px solid #dddddd;
-    border-radius: 25px;
-    padding: 6px 20px;
-    font-size: 12px;
-}
-
 #th_recipe_name {
     color: #fff;
     background-color: #e68a00;
@@ -174,33 +144,8 @@ img {
     padding: 5px;
 }
 
-.btn-custom {
-    margin-top: 20px;
-    background-color: transparent !important;
-    border: 2px solid #ddd;
-    padding: 12px 40px;
-    font-size: 16px;
-}
-
-.lead {
-    font-size: 18px;
-    line-height: 30px;
-    color: #767676;
-    margin: 0;
-    padding: 0;
-}
-
-.form-control:focus {
-    border-color: #ffffff !important;
-    box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25);
-}
-
 .navbar-form input {
     border: none !important;
-}
-
-.badge {
-    font-weight: 500;
 }
 
 blockquote {
@@ -215,41 +160,11 @@ button {
     cursor: pointer;
 }
 
-.full {
-    width: 100%;
-    float: left;
-    margin: 0;
-    padding: 0;
-}
-
-.d3-tooltip {
-    position: absolute;
-    line-height: 1.2;
-    border: 5px;
-    padding: 10px;
-    background: rgba(54, 54, 54, 0.8);
-    color: white;
-    border-radius: 10px;
-}
-
 .app_name {
     color: #cc6600;
     font-size: 30px;
     font-weight: bold;
     padding: 5px 10px;
-}
-
-.selected_ingredients {
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    background-color: #4CAF50;
 }
 
 .menu-area-main li.active a {
@@ -364,12 +279,6 @@ button {
     background: none !important;
 }
 
-.mean-container .mean-nav {
-    margin-top: 0px;
-    position: absolute;
-    top: 100%;
-}
-
 .main-menu ul > li {
     position: inherit;
     display: inline-block;
@@ -385,15 +294,6 @@ button {
     position: inherit;
     display: inline-block;
     vertical-align: middle;
-}
-
-.megamenu .sub-down {
-    max-width: 1140px;
-    width: 100%;
-    left: 0;
-    margin: 0 auto;
-    right: 0;
-    padding: 15px 0px;
 }
 
 .logout_btn {
@@ -472,13 +372,6 @@ button {
     border: #cccccc solid 1px;
     color: #fff;
 
-}
-
-.tabcontent {
-    color: white;
-    display: none;
-    padding: 20px 20px;
-    height: 100%;
 }
 
 .warning_msg {
@@ -564,28 +457,6 @@ button {
     padding: 0px 50px;
 }
 
-.submit {
-    padding: 9px 0;
-    background: #428713;
-    color: #fff;
-    margin-left: -5px;
-    font-weight: 500;
-    font-size: 18px;
-    max-width: 170px;
-    width: 100%;
-    border-radius: 30px;
-    text-transform: uppercase;
-    transition: all 0.3s ease-in;
-}
-
-.submit:hover {
-    background: #ff7e1d;
-
-    color: #fff;
-    transition: all 0.3s ease-in;
-
-}
-
 /*Vikwato CSS*/
 .column {
     display: block;
@@ -593,10 +464,6 @@ button {
     flex-grow: 1;
     flex-shrink: 1;
     padding: .75rem
-}
-
-.columns.is-mobile > .column.is-narrow {
-    flex: none
 }
 
 .columns.is-mobile > .column.is-full {
@@ -1991,12 +1858,6 @@ button {
     .column.is-offset-12-fullhd {
         margin-left: 100%
     }
-}
-
-.columns {
-    margin-left: -.75rem;
-    margin-right: -.75rem;
-    margin-top: -.75rem
 }
 
 .columns:last-child {
@@ -4342,9 +4203,6 @@ a.box:active {
 
 /*Desktop Stuff*/
 @media only screen and (min-width: 800px) {
-    .ts-container {
-        grid-template-rows: 150px 100px 20px auto 20px;
-    }
 
     .ts-indicators {
         grid-row-start: 2;
